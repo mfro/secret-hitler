@@ -20,6 +20,6 @@
 
     "include": [
         "./declare/**/*.d.ts",
-        "./src/**/*.ts"
+        "./dist/**/*.ts"
     ]
 }

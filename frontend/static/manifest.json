@@ -1,0 +1,20 @@
+{
+  "name": "Secret Hitler",
+  "short_name": "Secret Hitler",
+  "icons": [
+    {
+      "src": "/secret-hitler/static/img/icons/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/secret-hitler/static/img/icons/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "/secret-hitler/",
+  "display": "standalone",
+  "background_color": "#b9a992",
+  "theme_color": "#f0654b"
+}

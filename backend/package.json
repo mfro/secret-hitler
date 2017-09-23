@@ -3,7 +3,7 @@
     "description": "Secret hilter role assigner",
     "authors": "mfro",
     "version": "1.0.0",
-    "main": "out/main.js",
+    "main": "dist/main.js",
     "dependencies": {
         "ws": "^3.2.0"
     },

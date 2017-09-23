@@ -23,7 +23,7 @@ export default {
     margin: 1em;
     flex: 1 1;
     box-shadow: 0 0 10px gray;
-    border-radius: 5px;
+    border-radius: 2px;
     overflow: hidden;
 }
 

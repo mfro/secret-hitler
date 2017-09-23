@@ -18,12 +18,10 @@
 import { mapGetters } from 'vuex';
 
 import Player from './player.vue';
-import PlayerList from './player-list.vue';
 
 export default {
     components: {
         Player,
-        PlayerList,
     },
 
     computed: {
