@@ -4,7 +4,7 @@ import App from './App.vue'
 import store from './store';
 
 import './socket';
-import './fonts.less';
+import './uikit';
 
 new Vue({
   el: '#app',

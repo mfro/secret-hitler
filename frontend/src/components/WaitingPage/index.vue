@@ -8,8 +8,10 @@
         <player v-for="player in players" :key="player.id" :player="player" />
 
         <div class="ready-container">
-            <button v-if="self.isReady" @click="ready(false)">Not ready</button>
-            <button v-else @click="ready(true)">Ready</button>
+            <uikit-button @click="cancel()">Cancel</uikit-button>
+
+            <uikit-button v-if="self.isReady" @click="ready(false)">Not ready</uikit-button>
+            <uikit-button v-else @click="ready(true)">Ready</uikit-button>
         </div>
     </div>
 </template>
@@ -36,8 +38,12 @@ export default {
     },
 
     methods: {
+        cancel() {
+            this.$store.dispatch('reset');
+        },
+
         ready(isReady) {
-            this.$store.commit('setReady', isReady);
+            this.$store.dispatch('setReady', isReady);
         }
     }
 };
@@ -55,8 +61,8 @@ export default {
     display: flex;
     justify-content: center;
 
-    button {
-        padding: 0.4em 1em;
+    >button {
+        margin: 0 0.5em;
     }
 }
 </style>

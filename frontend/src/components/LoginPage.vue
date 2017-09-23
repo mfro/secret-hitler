@@ -4,8 +4,8 @@
 
         <div class="form">
             <span>Please enter your name:</span>
-            <input type="text" v-model="name" />
-            <button @click="start()">Submit</button>
+            <input type="text" v-model="name" @keydown="onKeyDown"/>
+            <uikit-button @click="start()">Submit</uikit-button>
         </div>
     </div>
 </template>
@@ -25,12 +25,17 @@ export default {
     },
 
     methods: {
+        onKeyDown(e) {
+            if (e.keyCode == 13)
+                this.start();
+        },
+        
         start() {
             try {
                 localStorage.setItem('secret-hitler/name', this.name);
             } catch (e) { }
 
-            this.$store.commit('setSelf', {
+            this.$store.dispatch('login', {
                 name: this.name
             });
         }
@@ -93,18 +98,5 @@ input {
     color: #413b32;
     outline: none;
     -webkit-appearance: none;
-}
-
-button {
-    padding: 0.5em 2em;
-    border-radius: 5px;
-
-    color: #eeeeee;
-    border: none;
-    background-color: #777777;
-
-    font-size: 16px;
-    font-weight: bold;
-    font-family: "Graphik", "Helvetica Neue", Helvetica, sans-serif;
 }
 </style>

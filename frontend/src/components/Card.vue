@@ -1,5 +1,5 @@
 <template>
-    <div class="card" @click="$emit('input', !value)">
+    <div class="card" @click="onClick">
         <div class="flipper" :class="{ flipped: value }">
             <div class="front" :style="frontStyle" />
             <div class="back" :style="backStyle" />
@@ -26,6 +26,41 @@ export default {
                 backgroundImage: `url(${this.card.back})`,
             };
         }
+    },
+
+    mounted() {
+        this.$el.addEventListener('touchstart', this.onTouchStart, { passive: true });
+        this.$el.addEventListener('touchend', this.onTouchEnd, { passive: true });
+        this.$el.addEventListener('touchcancel', () => this.cancel(), { passive: true });
+    },
+
+    methods: {
+        onTouchStart(e) {
+            this.touchStart = {
+                x: e.changedTouches[0].clientX,
+                y: e.changedTouches[0].clientY,
+            };
+            this.isPressed = true;
+        },
+
+        onTouchEnd(e) {
+            if (!this.touchStart) return;
+
+            this.ignore = true;
+            this.$emit('input', !this.value);
+            this.cancel();
+        },
+
+        onClick() {
+            if (this.ignore) return this.ignore = false;
+
+            this.$emit('input', !this.value);
+        },
+
+        cancel() {
+            this.isPressed = false;
+            this.touchStart = null;
+        }
     }
 };
 </script>
@@ -36,6 +71,7 @@ export default {
     position: relative;
     perspective: 1000px;
     margin-right: 10px;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .flipper {

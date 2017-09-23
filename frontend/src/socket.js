@@ -1,20 +1,25 @@
 import store from './store';
 
-store.watch(s => s.self, (self, oldSelf) => {
-    if (oldSelf) {
-        let delta = 0;
-        for (let key in self)
-            if (self[key] != oldSelf[key])
-                delta++;
-        if (delta == 0) return;
+let lastIsReady = false;
+store.subscribe((mutation, state) => {
+    if (mutation.type == 'setSelf') {
+        if (!ws) {
+            init(state.self);
+        }
     }
 
-    if (oldSelf)
-        send(self);
+    if (mutation.type == 'setReady') {
+        if (state.self.isReady != lastIsReady) {
+            send(state.self);
+            lastIsReady = state.self.isReady;
+        }
+    }
 
-    else if (!ws)
-        init(self);
-}, { deep: true });
+    if (mutation.type == 'reset') {
+        ws.close();
+        ws = null;
+    }
+});
 
 let ws;
 const handlers = {

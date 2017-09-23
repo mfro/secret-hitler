@@ -78,5 +78,9 @@ export default {
 
 .info {
     padding: 10px;
+    font-family: "courier-prime", Courier, sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    letter-spacing: -0.01em;
 }
 </style>

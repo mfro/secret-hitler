@@ -26,6 +26,10 @@ const mutations = {
         state.self = self;
     },
 
+    setReady(state, isReady) {
+        state.self.isReady = isReady;
+    },
+
     setPlayerList(state, list) {
         state.players = list;
 
@@ -37,15 +41,29 @@ const mutations = {
         state.assignment = ass;
     },
 
-    setReady(state, isReady) {
+    reset(state) {
+        state.self = null;
+        state.players = null;
+        state.assignment = null;
+    }
+};
+
+const actions = {
+    login(context, arg) {
+        context.commit('setSelf', {
+            name: arg.name
+        });
+    },
+
+    setReady(context, isReady) {
         if (!state.self)
             throw new Error('Invalid operation: no self');
 
-        state.self = {
-            id: state.self.id,
-            name: state.self.name,
-            isReady: isReady,
-        };
+        context.commit('setReady', isReady);
+    },
+
+    reset(context, isReady) {
+        context.commit('reset');
     }
 };
 
@@ -55,4 +73,5 @@ export default new Vuex.Store({
     state,
     getters,
     mutations,
+    actions,
 });

@@ -1,8 +1,8 @@
 <template>
     <div id="app">
-        <waiting-page v-if="isWaiting" />
+        <assignment-page v-if="isAssigned" />
+        <waiting-page v-else-if="isWaiting" />
         <login-page v-else-if="isLoggingIn" />
-        <assignment-page v-else-if="isAssigned" />
     </div>
 </template>
 
