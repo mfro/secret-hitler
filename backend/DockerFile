@@ -1,0 +1,12 @@
+FROM node:8.4
+
+ENV NPM_CONFIG_LOGLEVEL warn
+
+WORKDIR /app
+
+ADD . /app
+
+RUN npm i
+RUN npm run build
+
+CMD node .

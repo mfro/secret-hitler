@@ -1,0 +1,19 @@
+{
+    "name": "secret-hitler-backend",
+    "description": "Secret hilter role assigner",
+    "authors": "mfro",
+    "version": "1.0.0",
+    "main": "out/main.js",
+    "dependencies": {
+        "ws": "^3.2.0"
+    },
+    "devDependencies": {
+        "typescript": "^2.5.2",
+        "@types/node": "^8.0.30",
+        "@types/ws": "^3.0.2"
+    },
+    "scripts": {
+        "build": "tsc",
+        "watch": "tsc --watch"
+    }
+}
