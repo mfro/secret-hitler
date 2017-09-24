@@ -5,7 +5,7 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceRoot}/backend/dist/main.js"
+            "program": "${workspaceRoot}/secret-hitler-backend/dist/main.js"
         }
     ],
     "compounds": []

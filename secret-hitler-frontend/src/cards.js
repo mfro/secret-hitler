@@ -15,6 +15,10 @@ import * as role_liberal3 from './assets/role/liberal4.png';
 import * as role_liberal4 from './assets/role/liberal5.png';
 import * as role_liberal5 from './assets/role/liberal5.png';
 
+import * as vote_back from './assets/votes/back.png';
+import * as vote_ja from './assets/votes/ja.png';
+import * as vote_nein from './assets/votes/nein.png';
+
 const role_fascist = [role_fascist0, role_fascist1, role_fascist2];
 const role_liberal = [role_liberal0, role_liberal1, role_liberal2, role_liberal3, role_liberal4, role_liberal5];
 
@@ -40,6 +44,10 @@ export function getRoleCard(role) {
 
     return alert('something went wrong :/');
 }
+
+export const ja_card = { back: vote_back, front: vote_ja };
+export const nein_card = { back: vote_back, front: vote_nein };
+export const voting_card = { back: vote_nein, front: vote_ja };
 
 function rand(list) {
     return list[Math.floor(Math.random() * list.length)];

@@ -1,5 +1,5 @@
 <template>
-    <div class="card" @click="onClick">
+    <div class="card" @click="onClick" :class="{ horizontal }">
         <div class="flipper" :class="{ flipped: value }">
             <div class="front" :style="frontStyle" />
             <div class="back" :style="backStyle" />
@@ -12,6 +12,7 @@ export default {
     props: {
         card: Object,
         value: Boolean,
+        horizontal: { type: Boolean, default: false },
     },
 
     computed: {
@@ -72,6 +73,11 @@ export default {
     perspective: 1000px;
     margin-right: 10px;
     -webkit-tap-highlight-color: transparent;
+
+    // &.horizontal {
+    //     transform: rotateZ(-90deg);
+    //     transform-origin: center;
+    // }
 }
 
 .flipper {

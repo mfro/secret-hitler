@@ -1,6 +1,7 @@
 <template>
     <div id="app">
-        <assignment-page v-if="isAssigned" />
+        <vote-page v-if="isVoting" />
+        <assignment-page v-else-if="isAssigned" />
         <waiting-page v-else-if="isWaiting" />
         <login-page v-else-if="isLoggingIn" />
     </div>
@@ -10,6 +11,7 @@
 import LoginPage from './components/LoginPage.vue';
 import WaitingPage from './components/WaitingPage/index.vue';
 import AssignmentPage from './components/AssignmentPage.vue';
+import VotePage from './components/VotePage.vue';
 
 import { mapGetters } from 'vuex';
 
@@ -18,12 +20,14 @@ export default {
         LoginPage,
         WaitingPage,
         AssignmentPage,
+        VotePage
     },
 
     computed: {
         ...mapGetters({
             self: 'self',
             assignment: 'assignment',
+            isVoting: 'isVoting',
         }),
 
         isWaiting() {

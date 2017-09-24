@@ -4,7 +4,9 @@ import Vuex from 'vuex';
 const state = {
     self: null,
     players: null,
-    assignment: null,
+    assignment: { role: 'liberal', known: [] },
+
+    isVoting: false,
 };
 
 const getters = {
@@ -19,6 +21,10 @@ const getters = {
     assignment(state) {
         return state.assignment;
     },
+
+    isVoting(state) {
+        return state.isVoting;
+    }
 };
 
 const mutations = {
@@ -28,6 +34,10 @@ const mutations = {
 
     setReady(state, isReady) {
         state.self.isReady = isReady;
+    },
+
+    setVoting(state, isVoting) {
+        state.isVoting = isVoting;
     },
 
     setPlayerList(state, list) {
@@ -60,6 +70,10 @@ const actions = {
             throw new Error('Invalid operation: no self');
 
         context.commit('setReady', isReady);
+    },
+
+    setVoting(context, isVoting) {
+        context.commit('setVoting', isVoting);
     },
 
     reset(context, isReady) {

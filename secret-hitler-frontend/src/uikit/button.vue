@@ -38,15 +38,18 @@ export default {
         onTouchEnd(e) {
             if (!this.touchStart) return;
 
+            e.preventDefault();
+            e.stopPropagation();
+
             this.ignore = true;
-            this.$emit('click');
+            setTimeout(() => this.$emit('click'), 10);
             this.cancel();
         },
 
         onClick() {
             if (this.ignore) return this.ignore = false;
 
-            this.$emit('click');
+            setTimeout(() => this.$emit('click'), 10);
         },
 
         cancel() {

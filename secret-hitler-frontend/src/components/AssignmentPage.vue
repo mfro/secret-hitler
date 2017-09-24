@@ -22,6 +22,12 @@
                 The fascists you know are: {{ knownNames }}
             </span>
         </div>
+
+        <div class="ballot-container" v-else>
+            <div class="ballot">
+                <div class="ballot-stuffer" @click="$store.dispatch('setVoting', true)" />
+            </div>
+        </div>
     </div>
 </template>
 
@@ -39,6 +45,9 @@ export default {
 
     data() {
         return {
+            voteNoCard: cards.nein_card,
+            voteYesCard: cards.ja_card,
+
             roleFlipped: false,
             membershipFlipped: false,
         };
@@ -69,11 +78,33 @@ export default {
 .assignment {
     display: flex;
     flex-direction: column;
+    overflow: hidden;
 }
 
 .cards {
+    flex: 0 0 auto;
     display: flex;
     padding: 10px 0 0 10px;
+}
+
+.ballot-container {
+    display: flex;
+    justify-content: center;
+}
+
+.ballot {
+    width: calc((100vw - 30px) / 2);
+}
+
+.ballot-stuffer {
+    padding-top: 140%;
+    transform: rotate(-90deg) translateY(0.5px);
+
+    transform-origin: center;
+    background-image: url(../assets/votes/back.png);
+    background-size: contain;
+    background-position: center;
+    border: 1px solid gray;
 }
 
 .info {
