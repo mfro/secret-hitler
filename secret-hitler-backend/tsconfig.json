@@ -10,7 +10,7 @@
         "noImplicitThis": true,
         "strictNullChecks": true,
 
-        "outDir": "out",
+        "outDir": "dist",
         "sourceMap": true
     },
     
@@ -20,6 +20,6 @@
 
     "include": [
         "./declare/**/*.d.ts",
-        "./dist/**/*.ts"
+        "./src/**/*.ts"
     ]
 }
