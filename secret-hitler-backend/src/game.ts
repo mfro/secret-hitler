@@ -44,18 +44,16 @@ function update() {
 
     for (let player of players) {
         let role = assigned.get(player.id);
-        let known: Player[];
+        let ass: any = { role: role };
 
-        if (role == 'fascist' || (role == 'hitler' && hitlerKnows)) {
-            known = players.filter(p => (assigned.get(p.id) == 'fascist' || assigned.get(p.id) == 'hitler') && p != player);
-        } else {
-            known = [];
+        if (role == 'fascist') {
+            ass.hitler = players.find(p => assigned.get(p.id) == 'hitler');
+            ass.fascists = players.filter(p => assigned.get(p.id) == 'fascist' && p != player);
+        } else if (role == 'hitler' && hitlerKnows) {
+            ass.fascists = players.filter(p => assigned.get(p.id) == 'fascist' && p != player);
         }
 
-        player.handler('assignment', {
-            role: role,
-            known: known.map(k => k.id),
-        });
+        player.handler('assignment', ass);
     }
 
     players.splice(0, players.length);

@@ -18,8 +18,12 @@
                 You are a liberal.
             </span>
 
-            <span class="known" v-if="assignment.known.length > 0">
-                The fascists you know are: {{ knownNames }}
+            <span class="known" v-if="assignment.hitler">
+                {{ assignment.hitler.name }} is Hitler.
+            </span>
+
+            <span class="known" v-if="assignment.fascists && assignment.fascists.length > 0">
+                The fascists are: {{ assignment.fascists.map(p => p.name).join(', ') }}
             </span>
         </div>
 
@@ -66,10 +70,6 @@ export default {
         roleCard() {
             return cards.getRoleCard(this.assignment.role);
         },
-
-        knownNames() {
-            return this.assignment.known.map(id => this.allPlayers.find(p => p.id == id).name).join(', ');
-        }
     },
 
     methods: {
