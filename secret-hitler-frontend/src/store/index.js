@@ -4,7 +4,7 @@ import Vuex from 'vuex';
 const state = {
     self: null,
     players: null,
-    assignment: { role: 'liberal', known: [] },
+    assignment: null,
 
     isVoting: false,
 };

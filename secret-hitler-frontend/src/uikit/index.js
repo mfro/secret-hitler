@@ -1,4 +1,5 @@
 import './fonts.less';
+import './fast-click';
 
 import Vue from 'vue';
 

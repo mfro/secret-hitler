@@ -25,7 +25,7 @@
 
         <div class="ballot-container" v-else>
             <div class="ballot">
-                <div class="ballot-stuffer" @click="$store.dispatch('setVoting', true)" />
+                <div class="ballot-stuffer" v-fastclick="onBallot" />
             </div>
         </div>
     </div>
@@ -71,6 +71,12 @@ export default {
             return this.assignment.known.map(id => this.allPlayers.find(p => p.id == id).name).join(', ');
         }
     },
+
+    methods: {
+        onBallot() {
+            this.$store.dispatch('setVoting', true);
+        }
+    }
 };
 </script>
 
