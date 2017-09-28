@@ -27,10 +27,18 @@ function update() {
         if (!player.isReady) return;
     }
 
+    console.log('Starting game');
+
     let fCount = Math.floor((players.length - 3) / 2);
     let lCount = players.length - 1 - fCount;
     let hitlerKnows = (players.length < 7);
 
+    console.log(`  ${players.length} players`);
+    console.log(`  ${fCount} fascists ( + hitler )`);
+    console.log(`  ${lCount} liberals`);
+    console.log(`  1 hitler`);
+    console.log(`  hitler ${hitlerKnows ? 'knows' : 'does not know'} who the other fascists are`);
+    
     let roles = ['hitler'];
     for (let i = 0; i < fCount; i++) roles.push('fascist');
     for (let i = 0; i < lCount; i++) roles.push('liberal');
@@ -40,6 +48,8 @@ function update() {
         let i = Math.floor(Math.random() * roles.length);
         let role = roles.splice(i, 1)[0];
         assigned.set(player.id, role);
+
+        console.log(`  player ${player.name} (${player.id}) is ${role}`);
     }
 
     for (let player of players) {

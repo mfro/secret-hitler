@@ -1,1 +1,0 @@
-docker run -d -p 5005:8081 secret-hitler-backend

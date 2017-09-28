@@ -4,10 +4,11 @@ import * as WebSocket from 'ws';
 
 import * as game from './game';
 
+const port = 8081;
 const httpServer = http.createServer();
 
 const wsServer = new WebSocket.Server({
-    port: 8081,
+    port: port,
     server: httpServer,
 });
 
@@ -57,4 +58,5 @@ function send(socket: WebSocket, type: string, data: any) {
 }
 
 export function start() {
+    console.log("Started server on port " + port);
 }
