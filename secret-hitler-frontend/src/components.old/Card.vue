@@ -61,6 +61,7 @@ export default {
     padding-top: 139%;
 
     transform: rotateY(180deg);
+    
     &.flipped {
         transform: rotateY(0deg);
     }

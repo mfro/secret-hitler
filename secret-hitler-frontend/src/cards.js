@@ -19,27 +19,31 @@ import * as vote_back from './assets/votes/back.png';
 import * as vote_ja from './assets/votes/ja.png';
 import * as vote_nein from './assets/votes/nein.png';
 
+import * as policy_back from './assets/policy/back.png';
+import * as policy_liberal from './assets/policy/liberal.png';
+import * as policy_fascist from './assets/policy/fascist.png';
+
 const role_fascist = [role_fascist0, role_fascist1, role_fascist2];
 const role_liberal = [role_liberal0, role_liberal1, role_liberal2, role_liberal3, role_liberal4, role_liberal5];
 
 export function getMembershipCard(role) {
-    if (role == 'fascist' || role == 'hitler')
+    if (role == 'FASCIST' || role == 'HITLER')
         return { back: membership_back, front: membership_fascist };
 
-    if (role == 'liberal')
+    if (role == 'LIBERAL')
         return { back: membership_back, front: membership_liberal };
 
     return alert('something went wrong :/');
 }
 
 export function getRoleCard(role) {
-    if (role == 'hitler')
+    if (role == 'HITLER')
         return { back: role_back, front: role_hitler0 };
 
-    if (role == 'fascist')
+    if (role == 'FASCIST')
         return { back: role_back, front: rand(role_fascist) };
 
-    if (role == 'liberal')
+    if (role == 'LIBERAL')
         return { back: role_back, front: rand(role_liberal) };
 
     return alert('something went wrong :/');
@@ -48,6 +52,9 @@ export function getRoleCard(role) {
 export const ja_card = { back: vote_back, front: vote_ja };
 export const nein_card = { back: vote_back, front: vote_nein };
 export const voting_card = { back: vote_nein, front: vote_ja };
+
+export const liberal_policy = { back: policy_back, front: policy_liberal };
+export const fascist_policy = { back: policy_back, front: policy_fascist };
 
 function rand(list) {
     return list[Math.floor(Math.random() * list.length)];

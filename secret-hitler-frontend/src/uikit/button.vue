@@ -6,6 +6,10 @@
 
 <script>
 export default {
+    props: {
+        disabled: { requried: false, default: false },
+    },
+
     data() {
         return {
             isPressed: false,
@@ -15,7 +19,8 @@ export default {
     computed: {
         clazz() {
             return {
-                'active': this.isPressed
+                'active': this.isPressed,
+                'disabled': this.disabled,
             };
         }
     },
@@ -45,6 +50,12 @@ button {
     &.active,
     &:active {
         background-color: #616161;
+    }
+
+    &.disabled {
+        pointer-events: none;
+        color: darkgray;
+        background-color: #666666;
     }
 }
 </style>

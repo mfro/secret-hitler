@@ -2,83 +2,47 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 
 const state = {
-    self: null,
-    players: null,
-    assignment: null,
-
-    isVoting: false,
+    game: null,
+    results: [],
 };
 
 const getters = {
-    self(state) {
-        return state.self;
+    game(state) {
+        return state.game;
     },
 
-    allPlayers(state) {
-        return state.players;
+    results(state) {
+        return state.results;
     },
 
-    assignment(state) {
-        return state.assignment;
+    getPlayer: (state) => (id) => {
+        if (!state.game) return null;
+    
+        return state.game.players.find(p => p.id == id);
     },
 
-    isVoting(state) {
-        return state.isVoting;
+    localPlayer(state) {
+        if (!state.game) return null;
+
+        return state.game.players.find(p => p.isLocalPlayer);
     }
 };
 
 const mutations = {
-    setSelf(state, self) {
-        state.self = self;
+    SET_GAME(state, value) {
+        state.game = value;
     },
 
-    setReady(state, isReady) {
-        state.self.isReady = isReady;
+    POST_RESULT(state, value) {
+        state.results.push(value);
     },
 
-    setVoting(state, isVoting) {
-        state.isVoting = isVoting;
-    },
-
-    setPlayerList(state, list) {
-        state.players = list;
-
-        let self = list.find(p => p.id == state.self.id)
-        state.self = self;
-    },
-
-    setAssignment(state, ass) {
-        state.assignment = ass;
-    },
-
-    reset(state) {
-        state.self = null;
-        state.players = null;
-        state.assignment = null;
+    POP_RESULT(state) {
+        state.results.shift();
     }
 };
 
 const actions = {
-    login(context, arg) {
-        context.commit('setSelf', {
-            name: arg.name
-        });
-    },
-
-    setReady(context, isReady) {
-        if (!state.self)
-            throw new Error('Invalid operation: no self');
-
-        context.commit('setReady', isReady);
-    },
-
-    setVoting(context, isVoting) {
-        context.commit('setVoting', isVoting);
-    },
-
-    reset(context, isReady) {
-        context.commit('reset');
-    }
 };
 
 Vue.use(Vuex);

@@ -10,5 +10,5 @@ for (let key of context.keys()) {
     let name = split[0];
     let component = context(key);
 
-    Vue.component('uikit-' + name, component);
+    Vue.component('uikit:' + name, component);
 }
