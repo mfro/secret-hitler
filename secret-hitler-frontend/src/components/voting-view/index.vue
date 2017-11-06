@@ -1,30 +1,41 @@
 <template>
-    <uikit:simple-page no-footer>
-        <span slot="header" v-if="localPlayer.hasVoted">Waiting for everyone to vote</span>
-        <span slot="header" v-else>{{ president.name }} has nominated {{ chancellor.name }}</span>
+    <uikit:simple-page no-footer no-header>
+        <v-layout class="ballot mb-2" column align-center>
+            <v-layout column justify-center class="president">
+                <div class="image"/>
+                <span class="title name">Max</span>
+            </v-layout>
+            <v-layout column justify-center class="chancellor">
+                <div class="image"/>
+                <span class="title name">Also max</span>
+            </v-layout>                
+        </v-layout>
 
-        <div class="player-list" v-if="localPlayer.hasVoted">
-            <player :id="localPlayer.id" />
+        <v-layout wrap align-start align-content-start v-if="localPlayer.hasVoted">
+            <v-layout v-for="player in players" :key="player.id"
+                align-center px-3 py-2
+                class="player">
+                <v-icon medium class="icon green--text" v-if="player.hasVoted">check</v-icon>
+                <v-icon medium class="icon red--text" v-else>clear</v-icon>
 
-            <player v-for="player in others" :key="player.id" :id="player.id" />
-        </div>
-
-        <div class="cards" v-else>
-            <voting-card horizontal class="card" @input="vote" :vote="true"/>
-            <voting-card horizontal class="card" @input="vote" :vote="false"/>
-        </div>
+                <span class="player-name ml-3">{{ player.name }}</span>
+            </v-layout>
+        </v-layout>
+            
+        <v-layout align-center justify-center v-else class="pl-3">
+            <voting-card class="card mr-3" @input="vote" :vote="true"/>
+            <voting-card class="card mr-3" @input="vote" :vote="false"/>
+        </v-layout>
     </uikit:simple-page>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
 
-import Player from './player';
 import VotingCard from '@/ui/voting-card';
 
 export default {
     components: {
-        Player,
         VotingCard,
     },
 
@@ -37,8 +48,9 @@ export default {
     computed: {
         ...mapGetters({
             game: 'game',
-            localPlayer: 'localPlayer',
             getPlayer: 'getPlayer',
+            allPlayers: 'allPlayers',
+            localPlayer: 'localPlayer',
         }),
 
         president() {
@@ -49,8 +61,12 @@ export default {
             return this.getPlayer(this.game.nomination.chancellor);
         },
 
+        players() {
+            return [this.localPlayer, ...this.others];
+        },
+
         others() {
-            return this.game.players.filter(p => p != this.localPlayer && p.isAlive);
+            return this.allPlayers.filter(p => p != this.localPlayer && p.isAlive);
         }
     },
 
@@ -62,39 +78,49 @@ export default {
 };
 </script>
 
-<style scoped lang="less">
+<style module lang="less">
 @import "~style";
 
-.has-voted {
-    width: 100%;
-    height: 100%;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    overflow: auto;
-
-    padding: 0 1em;
-    box-sizing: border-box;
+.ballot {
+    flex: 0 0 auto;
 }
 
-.cards {
-    width: 100%;
-    height: 100%;
-    
-    padding: 1em;
-    box-sizing: border-box;
-    
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+.president, .chancellor {
+    width: 70%;
+    margin-top: @spacer;
 
-    .card {
-        flex: 0 0 auto;
-        width: 70%;
-        margin-bottom: 1em;
+    .image {
+        width: 100%;
+        padding-top: 30%;
+        background-size: cover;
+        background-position: 0 0;
     }
+
+    .name {
+        margin: (@spacer * 0.5) 0 @spacer 0;
+        align-self: center;
+    }
+}
+
+.president .image {
+    background-image: url(../../assets/plaque/president.png);
+}
+
+.chancellor .image {
+    background-image: url(../../assets/plaque/chancellor.png);
+}
+
+.player {
+    flex-basis: 34%;
+
+    .icon {
+        transition: none;
+        font-weight: bold;
+    }
+}
+
+.card {
+    flex: 1 1;
 }
 
 .voting {

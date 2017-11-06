@@ -43,12 +43,15 @@ export function StateMachine<TState, TContext, TTransitions extends string>(
             if (updates == null)
                 throw new Error(`Stuck on ${state}`);
 
+
             for (let action of updates) {
                 let name = action.bind(ctx)() as TTransitions | undefined;
                 if (name == undefined)
                     continue;
 
                 let t = this.lookup.get(name)!;
+
+                console.log(`Doing transition ${t.name} [${t.from} => ${t.to}]`);
 
                 this.do_transition(ctx, t);
 

@@ -31,18 +31,32 @@ function connect(path) {
         console.log(msg);
     });
 
-    ws.addEventListener('error', e => {
-        store.commit('SET_GAME', null);
-        ws = null;
+    ws.addEventListener('open', e => {
+        store.commit('SET_CONNECTION', 'OPEN');
+    })
+
+    ws.addEventListener('close', e => {
+        dispose();
     });
+
+    ws.addEventListener('error', e => {
+        console.error(e);
+        dispose();
+    });
+
+    store.commit('SET_CONNECTION', 'CONNECTING');
 }
 
-export function rejoin(id) {
-    connect('/rejoin?id=' + id);
+export function rejoin(game, id) {
+    connect(`/rejoin?game=${game}&id=${id}`);
 }
 
-export function join(name) {
-    connect('/join?name=' + name);
+export function join(game, name) {
+    connect(`/join?game=${game}&name=${name}`);
+}
+
+export function create(name) {
+    connect('/create?name=' + name);
 }
 
 export function send(name, args) {
@@ -51,3 +65,46 @@ export function send(name, args) {
         args: args,
     }));
 }
+
+function dispose() {
+    store.commit('SET_CONNECTION', null);
+
+    let game = store.getters.game;
+    if (game && game.state == 'COMPLETED')
+        return;
+        
+    localStorage.removeItem('secret-hitler/rejoin-info');
+    store.commit('SET_GAME', null);
+    ws = null;
+}
+
+function loadRejoinInfo() {
+    try {
+        const raw = localStorage.getItem('secret-hitler/rejoin-info');
+        if (!raw) return;
+        const info = JSON.parse(raw);
+        if (!info || !(info instanceof Array)) return;
+
+        rejoin(info[0], info[1]);
+    } catch (e) {
+        localStorage.removeItem('secret-hitler/rejoin-info');
+    }
+}
+
+loadRejoinInfo();
+
+window.addEventListener('keydown', e => {
+    if (e.keyCode == 116) {
+        if (store.getters.localPlayer &&
+            store.getters.game.state != 'LOBBY') {
+            e.preventDefault();
+            try {
+                localStorage.setItem('secret-hitler/player-id', state.getters.localPlayer.id);
+            } catch (e) { }
+
+            setTimeout(() => {
+                window.location.reload();
+            }, 500);
+        }
+    }
+});

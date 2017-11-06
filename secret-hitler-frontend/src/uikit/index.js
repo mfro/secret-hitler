@@ -1,14 +1,11 @@
-import './fonts.less';
-import './fast-click';
+import Components from './components';
+import Directives from './directives';
+import Style from './style';
 
 import Vue from 'vue';
 
-const context = require.context('.', true, /\.vue$/);
+import Vuetify from 'vuetify';
+import SpecificCSS from '@mfro/vue-specific-css';
 
-for (let key of context.keys()) {
-    let split = key.split(/\.|\//).filter(f => f);
-    let name = split[0];
-    let component = context(key);
-
-    Vue.component('uikit:' + name, component);
-}
+Vue.use(Vuetify);
+Vue.use(SpecificCSS);

@@ -2,13 +2,13 @@
     <uikit:simple-page>
         <span slot="header">These are the top three cards in the deck</span>
 
-        <div class="preview-deck">
-            <policy-card :policy="card" v-for="(card, i) of action.learned" :key="i"/>
-        </div>
-
-        <div slot="footer" class="bottom">
-            <uikit:button @click="complete()">Ok</uikit:button>
-        </div>
+        <v-layout align-center pl-3>
+            <policy-card class="card" :policy="card" v-for="(card, i) of action.learned" :key="i"/>
+        </v-layout>
+        
+        <v-layout slot="footer" align-center justify-center>
+            <v-btn @click="complete()">Ok</v-btn>
+        </v-layout>
     </uikit:simple-page>
 </template>
 
@@ -41,7 +41,7 @@ export default {
 };
 </script>
 
-<style scoped lang="less">
+<style module lang="less">
 @import "~style";
 
 .preview-deck {
@@ -49,16 +49,10 @@ export default {
     justify-content: center;
 
     padding: 1em 0 1em 1em;
-    box-sizing: border-box;
 }
 
 .card {
-    height: 16em;
-    margin-right: 1em;
-}
-
-.bottom {
-    display: flex;
-    justify-content: center;
+    flex: 1 1;
+    margin-right: @spacer;
 }
 </style>

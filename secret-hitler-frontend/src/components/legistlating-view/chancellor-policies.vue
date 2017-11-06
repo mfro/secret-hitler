@@ -2,13 +2,17 @@
     <uikit:simple-page>
         <span slot="header">Select a policy to enact</span>
 
-        <div class="cards">
-            <policy-card v-for="(card, i) in session.chancellorCards" :key="i" :policy="card" @input="selected = i" :class="{ active: selected == i }"/>
-        </div>
+        <v-layout align-center py-3 pl-3>
+            <v-flex v-for="(card, i) in session.chancellorCards" :key="i" class="card-box mr-3">
+                <policy-card :policy="card" @input="selected = i" :class="{ active: selected == i}"/>
+            </v-flex>
+        </v-layout>
 
-        <div slot="footer" class="bottom">
-            <uikit:button :disabled="!isReady" @click="submit()">Enact</uikit:button>
-        </div>
+        <v-layout slot="footer" align-center justify-center>
+            <v-btn v-if="showVeto" :disabled="!canVeto" @click="veto()">Request veto</v-btn>
+
+            <v-btn :disabled="!isReady" @click="submit()">Enact</v-btn>
+        </v-layout>
     </uikit:simple-page>
 </template>
 
@@ -40,10 +44,22 @@ export default {
 
         isReady() {
             return this.selected != -1;
+        },
+
+        showVeto() {
+            return this.game.boardState.fascists == 5;
+        },
+
+        canVeto() {
+            return this.showVeto && !this.session.vetoRequested;
         }
     },
 
     methods: {
+        veto() {
+            this.$send('LEGISLATURE_VETO');
+        },
+        
         submit() {
             let is = [0, 1];
             is.splice(is.indexOf(this.selected), 1);
@@ -56,33 +72,14 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less" module>
 @import "~style";
 
-.header {
-    .state-header();
-}
+.card-box {
+    flex-basis: 0;
 
-.cards {
-    flex: 1;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    padding: 1em 1em 0 0;
-
-    > div {
-        flex: 0 1 calc(50% - 1em);
-        margin-left: 1em;
-        margin-bottom: 1em;
-
-        &.active {
-            box-shadow: 0 0 0 4px #4CAF50;
-        }
+    .active {
+        box-shadow: 0 0 0 4px #4CAF50;
     }
-}
-
-.bottom {
-    display: flex;
-    justify-content: center;
 }
 </style>

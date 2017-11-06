@@ -3,10 +3,10 @@
         <span slot="header">Choose a player to assassinate</span>
 
         <player-selector v-model="target" :filter="filter"/>
-
-        <div slot="footer" class="bottom">
-            <uikit:button @click="submit()">Shoot</uikit:button>
-        </div>
+        
+        <v-layout slot="footer" align-center justify-center>
+            <v-btn :disabled="!target" @click="submit()">Shoot</v-btn>
+        </v-layout>
     </uikit:simple-page>
 </template>
 
@@ -49,7 +49,7 @@ export default {
 };
 </script>
 
-<style scoped lang="less">
+<style module lang="less">
 @import "~style";
 
 .preview-deck {

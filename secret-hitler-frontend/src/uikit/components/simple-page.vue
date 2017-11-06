@@ -1,17 +1,17 @@
 <template>
-    <div class="simple-page">
-        <div class="header" v-if="!noHeader">
+    <v-layout column class="simple-page">
+        <div class="header mx-3 mt-3" v-if="!noHeader">
             <slot name="header"/>
         </div>
 
-        <div class="contents">
+        <v-layout column>
             <slot/>
-        </div>
+        </v-layout>
         
-        <div class="footer" v-if="!noFooter">
+        <div class="pa-3" v-if="!noFooter">
             <slot name="footer"/>
         </div>
-    </div>
+    </v-layout>
 </template>
 
 <script>
@@ -24,7 +24,7 @@ export default {
 </script>
 
 
-<style scoped lang="less">
+<style module lang="less">
 @import "~style";
 
 .simple-page {
@@ -36,14 +36,5 @@ export default {
 
 .header {
     .state-header();
-}
-
-.contents {
-    flex: 1 1;
-    overflow: auto;
-}
-
-.footer {
-    padding: 1em;
 }
 </style>

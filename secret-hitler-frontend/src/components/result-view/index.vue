@@ -1,29 +1,35 @@
 <template>
     <uikit:simple-page no-header>
-        <!-- <span class="raw">{{ result }}</span> -->
-
-        <div class="contents">
+        <v-flex class="contents">
             <component :is="'result-' + result.name" :args="result.args"/>
-        </div>
+        </v-flex>
 
-        <div slot="footer" class="bottom">
-            <uikit:button @click="accept()">Ok</uikit:button>
-        </div>
+        <v-layout slot="footer" align-center justify-center>
+            <v-btn @click="accept()">Ok</v-btn>
+        </v-layout>
     </uikit:simple-page>
 </template>
 
 <script>
 import ResultVote from './results/vote';
+import ResultVeto from './results/veto';
 import ResultEnact from './results/enact';
 import ResultAnarchy from './results/anarchy';
+import ResultInvestigation from './results/investigation';
+import ResultAssassination from './results/assassination';
 import ResultRoleAssignment from './results/role-assignment';
+import ResultSpecialElection from './results/special-election';
 
 export default {
     components: {
         ResultVote,
+        ResultVeto,
         ResultEnact,
         ResultAnarchy,
+        ResultInvestigation,
+        ResultAssassination,
         ResultRoleAssignment,
+        ResultSpecialElection
     },
 
     props: {
@@ -38,19 +44,10 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="less" module>
 .result-view {
     height: 100%;
     display: flex;
     flex-direction: column;
-}
-
-.contents {
-    flex: 1;
-}
-
-.bottom {
-    display: flex;
-    justify-content: center;
 }
 </style>

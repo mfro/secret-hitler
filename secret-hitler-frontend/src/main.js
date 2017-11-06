@@ -2,18 +2,16 @@ import Vue from 'vue'
 import App from './App.vue'
 
 import store from './store';
+import * as cards from './cards';
 import * as socket from './socket';
 
 import './uikit';
+import extend from '@mfro/promise-extensions';
 
-const debug = false;
+extend(Promise);
 
 Vue.prototype.$send = function (name, args) {
-    if (debug) {
-        console.log(name, args);
-    } else {
-        socket.send(name, args);
-    }
+    socket.send(name, args);
 };
 
 new Vue({
@@ -22,8 +20,6 @@ new Vue({
     render: h => h(App)
 });
 
-if (debug) {
-    require('./store/debug');
-}
-
 window.socket = socket;
+
+cards.load();

@@ -1,5 +1,5 @@
 <template>
-    <card :card="card" :value="true" :horizontal="horizontal" @input="$emit('input', policy)"/>
+    <card no-border :card="card" :value="true" :horizontal="horizontal" @input="$emit('input', policy)"/>
 </template>
 
 <script>
@@ -29,7 +29,7 @@ export default {
 };
 </script>
 
-<style scoped lang="less">
+<style module lang="less">
 @import "~style";
 
 .policy-card {

@@ -4,120 +4,94 @@ import * as WebSocket from 'ws';
 
 import * as actions from '../actions';
 
-import { Socket } from '.';
+import { Socket } from './socket';
+import { Context } from './context';
 
-import { Game } from '../game';
+let contexts = new Map<string, Context>();
 
-let game: Game;
-newGame();
-
-const sockets = new Array<Socket>();
-
-function newGame() {
-    game = new Game();
-}
-
-function sync() {
-    let results = game.update();
-
-    for (let socket of sockets) {
-        socket.sync();
-
-        for (let result of results) {
-            socket.sendResult(result);
-        }
-    }
-}
-
-function handle(socket: Socket, msg: { name: string, args: any }) {
-    let ctx = {
-        game: game,
-        params: msg.args,
-        sender: socket.player,
-    };
-
-    return actions.invoke(msg.name, ctx).then(() => {
-        sync();
-    }, e => {
-        console.error(e);
-    }).finally(() => {
-        try {
-            sync();
-        } catch (e) {
-            console.error(e)
-        }
-    });
-}
-
-function cleanup(socket: Socket) {
-    let index = sockets.indexOf(socket);
-    if (index < 0)
-        throw new Error(`Socket not found: ${socket}`);
-
-    sockets.splice(index, 1);
-
-    sync();
-}
-
-const port = 8081;
-const httpServer = http.createServer();
-
-const wsServer = new WebSocket.Server({
-    port: port,
-    server: httpServer,
-});
-
-wsServer.on('connection', (base, req) => {
-    console.log('new Socket', req.url);
-
+function onConnect(base: WebSocket, req: http.IncomingMessage) {
     let info = url.parse(req.url!, true);
 
-    if (info.pathname == '/join') {
+    if (info.pathname == '/create') {
         let name = info.query.name;
 
-        let player = game.addPlayer(name);
-        let socket = new Socket(base, player);
+        let context = new Context();
+        context.join(base, name);
 
-        socket.on('close', () => cleanup(socket));
-        socket.on('message', m => handle(socket, m));
+        contexts.set(context.game.name, context);
+        context.on('complete', () => contexts.delete(context.game.name));
+        return;
+    }
+    
+    if (info.pathname == '/join') {
+        let name = info.query.name;
+        let game = info.query.game;
 
-        sockets.push(socket);
-    } else if (info.pathname == '/rejoin') {
+        let context = contexts.get(game);
+        if (context == null) return base.close();
+
+        context.join(base, name);
+        return;
+    }
+    
+    if (info.pathname == '/rejoin') {
         let id = parseInt(info.query.id);
+        let game = info.query.game;
 
-        let player = game.allPlayers.find(p => p.id == id)!;
-        let socket = new Socket(base, player);
+        let context = contexts.get(game);
+        if (context == null) return base.close();
 
-        socket.on('close', () => cleanup(socket));
-        socket.on('message', m => handle(socket, m));
+        context.rejoin(base, id);
+        return;
+    }
+}
 
-        sockets.push(socket);
+function shouldHandle(req: http.IncomingMessage) {
+    let info = url.parse(req.url!, true);
+
+    if (info.pathname == '/create') {
+        let name = info.query.name;
+
+        return name != null;
     }
 
-    sync();
-});
-
-wsServer.shouldHandle = (req) => {
-    let info = url.parse(req.url!, true);
-    let name = info.query.name;
-
     if (info.pathname == '/join') {
+        let game = info.query.game;
         let name = info.query.name;
-        let player = game.allPlayers.find(p => intern(p.name) == intern(name));
-        return intern(name) != null && player == null;
+
+        let context = contexts.get(game);
+        if (context == null)
+            return false;
+
+        return context.canJoin(name);
     }
 
     if (info.pathname == '/rejoin') {
+        let game = info.query.game;
         let id = parseInt(info.query.id);
-        let player = game.allPlayers.find(p => p.id == id);
-        let socket = sockets.find(s => s.player == player);
-        return player != null && socket == null;
+
+        let context = contexts.get(game);
+        if (context == null)
+            return false;
+
+        return context.canRejoin(id);
     }
 
     return false;
 };
 
 export function start() {
+    const port = 8081;
+    const httpServer = http.createServer();
+    
+    const wsServer = new WebSocket.Server({
+        port: port,
+        server: httpServer,
+    });
+
+    wsServer.on('connection', onConnect);
+    wsServer.shouldHandle = shouldHandle;
+
     console.log("Started server on port " + port);
 }
 

@@ -1,7 +1,7 @@
 <template>
-    <div class="card" v-fastclick="onClick" :style="style">
+    <div class="card" :style="style">
         <div class="rotation" :class="{ horizontal }" :style="rotStyle">
-            <div class="flipper" :class="{ flipped: value }">
+            <div class="flipper" :class="{ flipped: value, border: !noBorder }" @click="onClick">
                 <div class="front" :style="frontStyle" />
                 <div class="back" :style="backStyle" />
             </div>
@@ -14,6 +14,7 @@ export default {
     props: {
         card: Object,
         value: Boolean,
+        noBorder: { type: Boolean, default: false },
         horizontal: { type: Boolean, default: false },
     },
 
@@ -66,7 +67,7 @@ export default {
                     height: box.height,
                 };
 
-                let ratio = 256 / 367;
+                let ratio = 256 / 355;
 
                 let width, height;
                 if (this.horizontal) {
@@ -101,13 +102,11 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="less" module>
 @rounding: 0.4em;
 
 .card {
-    flex: 1;
     position: relative;
-    perspective: 1000px;
 
     border-radius: @rounding;
 }
@@ -116,6 +115,7 @@ export default {
     position: absolute;
     top: 50%;
     left: 50%;
+    perspective: 600px;
 
     transform: translateX(-50%) translateY(-50%);
 
@@ -128,16 +128,19 @@ export default {
 .flipper {
     height: 100%;
     transition: 500ms;
-    transform-style: preserve-3d;
     position: relative;
 
-    box-sizing: border-box;
-    border: 1px solid gray;
     border-radius: @rounding;
 
-    transform: rotateY(180deg);
+    transform-style: preserve-3d;
+    transform: rotate3d(0, 1, 0, 180deg);
+
     &.flipped {
-        transform: rotateY(0deg);
+        transform: rotate3d(0, 1, 0, 0deg);
+    }
+
+    &.border {
+        border: 1px solid gray;
     }
 }
 

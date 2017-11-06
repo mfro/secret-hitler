@@ -38,6 +38,10 @@ export class Socket extends EventEmitter {
         }));
     }
 
+    close() {
+        this.base.close();
+    }
+
     private onClose(code: number, message: string) {
         if (this.game.state == GameState.LOBBY) {
             this.game.removePlayer(this.player);

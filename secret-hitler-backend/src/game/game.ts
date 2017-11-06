@@ -116,6 +116,10 @@ mac.update(GameState.EXECUTIVE_ACTION, function () {
                 action.learned = {
                     membership: action.target.assignment!.membership,
                 };
+                
+                this.postResult('investigation', {
+                    player: action.target
+                });
             }
             break;
 
@@ -125,6 +129,11 @@ mac.update(GameState.EXECUTIVE_ACTION, function () {
                     president: action.target,
                     chancellor: null,
                 };
+
+                this.postResult('special-election', {
+                    player: action.target
+                });
+
                 return Transitions.COMPLETE_ACTION;
             }
             break;
@@ -135,6 +144,10 @@ mac.update(GameState.EXECUTIVE_ACTION, function () {
                 if (action.target.assignment!.isHitler)
                     return Transitions.LIBERAL_HITLER_VICTORY;
 
+                this.postResult('assassination', {
+                    player: action.target
+                });
+
                 return Transitions.COMPLETE_ACTION;
             }
             break;
@@ -143,6 +156,8 @@ mac.update(GameState.EXECUTIVE_ACTION, function () {
     if (action.complete)
         return Transitions.COMPLETE_ACTION;
 });
+
+mac.update(GameState.COMPLETED, function () { })
 
 mac.from(GameState.LOBBY, function () {
     this.cardPool = new CardPool();
@@ -320,8 +335,8 @@ mac.from(GameState.LEGISLATING, function () {
 
     let session = this.legislativeSession!;
 
-    session.president.termLimited = true;
-    session.chancellor.termLimited = this.alivePlayers.length > 5;
+    session.president.termLimited = this.alivePlayers.length > 5;
+    session.chancellor.termLimited = true;
 
     this.legislativeSession = null;
 });
@@ -393,6 +408,8 @@ export class Game {
     readonly allPlayers = new Array<Player>();
     get alivePlayers() { return this.allPlayers.filter(p => p.isAlive); }
 
+    name: string;
+
     cardPool: CardPool;
     nextPresident: number;
 
@@ -409,6 +426,11 @@ export class Game {
     results = new Array<{ name: string, args: any }>();
 
     victory: string | null = null;
+
+    constructor() {
+        let id = Math.floor(Math.random() * 100);
+        this.name = id.toString();
+    }
 
     postResult(name: string, args: any) {
         this.results.push({
@@ -483,6 +505,7 @@ export class Game {
 
     serialize(perspective: Player) {
         let data: any = {
+            name: this.name,
             players: this.allPlayers.map(p => json.serialize(p, perspective)),
 
             state: this.state,

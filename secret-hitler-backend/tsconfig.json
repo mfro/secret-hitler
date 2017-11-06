@@ -3,8 +3,6 @@
         "target": "es2015",
         "module": "commonjs",
 
-        "allowSyntheticDefaultImports": true,
-        
         "alwaysStrict": true,
         "noImplicitAny": true,
         "noImplicitThis": true,

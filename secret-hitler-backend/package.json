@@ -5,13 +5,14 @@
     "version": "1.0.0",
     "main": "dist/main.js",
     "dependencies": {
+        "typestate": "^1.0.4",
         "ws": "^3.2.0",
-        "typestate": "^1.0.4"
+        "@mfro/promise-extensions": "^2.0.0"
     },
     "devDependencies": {
-        "typescript": "^2.5.2",
         "@types/node": "^8.0.30",
-        "@types/ws": "^3.0.2"
+        "@types/ws": "^3.0.2",
+        "typescript": "^2.5.2"
     },
     "scripts": {
         "build": "tsc",

@@ -1,15 +1,65 @@
 <template>
-    <div id="app">
-        <span class="raw">{{ localPlayer && localPlayer.name }}</span>
+    <v-app>
+        <v-toolbar app dark class="accent">
+            <v-toolbar-side-icon v-if="isStarted" @click="drawer = !drawer"></v-toolbar-side-icon>
+            <v-toolbar-title>Secret Hitler</v-toolbar-title>
+            <v-spacer></v-spacer>
+        </v-toolbar>
 
-        <div class="results" v-if="result">
-            <result-view :result="result"/>
-        </div>
+        <v-navigation-drawer app temporary v-model="drawer" class="pb-0">
+            <v-layout column fill-height>
+                <v-layout row v-if="isStarted" class="scores">
+                    <v-layout column my-3 ml-3 class="score">
+                        <policy-card policy="LIBERAL"/>
+                        <span class="title pa-3">{{ game.boardState.liberals }}</span>
+                    </v-layout>
 
-        <div class="page-container" v-else-if="page">
-            <component :is="`${page}-view`"/>
-        </div>
-    </div>
+                    <v-layout column ma-3 class="score">
+                        <policy-card policy="FASCIST"/>
+                        <span class="title pa-3">{{ game.boardState.fascists }}</span>
+                    </v-layout>
+                </v-layout>
+
+                <v-layout v-if="isStarted" class="election-tracker pb-2">
+                    <v-layout align-center justify-center v-for="n in 3" :key="n">
+                        <v-icon v-if="game.boardState.voteFailures == n - 1">radio_button_checked</v-icon>
+                        <v-icon v-else>radio_button_unchecked</v-icon>
+                    </v-layout>
+
+                    <v-layout align-center justify-center>
+                        <v-icon>error_outline</v-icon>
+                    </v-layout>
+                </v-layout>
+
+                <v-list>
+                    <v-divider/>
+
+                    <v-list-tile v-for="arg in navs" :key="arg.id" @click="nav(arg.id)" :class="{ navActive: force == arg.id }">
+                        <v-list-tile-action>
+                            <v-icon v-text="arg.icon"/>
+                        </v-list-tile-action>
+                        <v-list-tile-content>
+                            <v-list-tile-title v-text="arg.label"/>
+                        </v-list-tile-content>
+                    </v-list-tile>
+                </v-list>
+            </v-layout>
+        </v-navigation-drawer>
+
+        <main>
+            <v-content class="content">
+                <log-view v-if="force == 'log'"/>
+
+                <assignment-view v-else-if="force == 'role'"/>
+
+                <result-view :result="result" v-else-if="result"/>
+
+                <component :is="`${page}-view`" v-else-if="page"/>
+
+                <span class="raw" v-else>{{ game }}</span>
+            </v-content>
+        </main>
+    </v-app>
 </template>
 
 <script>
@@ -23,9 +73,14 @@ import LegislatingView from '@/components/legistlating-view';
 import VotingView from '@/components/voting-view';
 import LoginView from '@/components/login-view';
 import ExecutiveActionView from '@/components/executive_action-view';
-import CompleteView from '@/components/complete-view';
+import CompletedView from '@/components/completed-view';
 
 import ResultView from '@/components/result-view';
+
+import LogView from '@/components/log-view';
+import AssignmentView from '@/components/assignment-view';
+
+import PolicyCard from '@/ui/policy-card';
 
 export default {
     name: 'SecretHitler',
@@ -38,7 +93,22 @@ export default {
         LoginView,
         ResultView,
         ExecutiveActionView,
-        CompleteView,
+        CompletedView,
+        PolicyCard,
+        LogView,
+        AssignmentView,
+    },
+
+    data() {
+        return {
+            drawer: false,
+            force: 'home',
+            navs: [
+                { icon: 'home', label: 'Home', id: 'home', },
+                { icon: 'person', label: 'Role', id: 'role', },
+                { icon: 'history', label: 'Game log', id: 'log', },
+            ]
+        };
     },
 
     computed: {
@@ -74,57 +144,53 @@ export default {
     watch: {
         isStarted() {
             try {
-                localStorage.setItem('secret-hitler/player-id', this.localPlayer.id);
+                localStorage.setItem('secret-hitler/rejoin-info', JSON.stringify([this.game.name, this.localPlayer.id]));
             } catch (e) { }
         }
     },
 
-    created() {
-        let id;
-        try {
-            id = localStorage.getItem('secret-hitler/player-id') || '';
-            id = parseInt(id);
-            if (isNaN(id)) return;
-        } catch (e) {
-            return
+    methods: {
+        nav(page) {
+            this.force = page;
+            this.drawer = false;
         }
-
-        socket.rejoin(id);
-    },
+    }
 };
 </script>
 
-<style>
-#app {
-    font-family: "Avenir", Helvetica, Arial, sans-serif;
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
-
-    display: flex;
-    flex-direction: column;
-    background-color: red;
+<style module lang="less">
+.content {
+    background-color: white;
 }
 
-.results {
-    flex: 1;
-    overflow: hidden;
-    background-color: #b9a992;
+.scores {
+    flex: 0 0 auto;
 }
 
-.page-container {
-    flex: 1;
-    overflow: hidden;
-    background-color: #b9a992;
+.election-tracker {
+    flex: 0 0 auto;
+}
+
+.score {
+    flex-basis: 0;
+
+    span {
+        align-self: center;
+    }
+}
+
+.navActive {
+    background: #eeeeee;   
 }
 
 .raw {
     white-space: pre;
     font-family: monospace;
 }
+</style>
 
-body {
-    margin: 0;
-    background-color: #b9a992;
+<style lang="less">
+html {
+    touch-action: manipulation;
 }
 </style>

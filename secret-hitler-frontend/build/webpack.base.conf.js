@@ -22,7 +22,7 @@ module.exports = {
     extensions: ['.js', '.vue', '.json'],
     alias: {
       '@': resolve('src'),
-      'style': resolve('src/style.less'),
+      'style': resolve('src/uikit/style/imports.less'),
     }
   },
   module: {
@@ -35,16 +35,8 @@ module.exports = {
       {
         test: /\.js$/,
         loader: 'babel-loader',
-        include: [resolve('src'), resolve('test')]
+        include: [resolve('src'), resolve('test')],
       },
-      // {
-      //   test: /\.less$/,
-      //   use: [
-      //     'style-loader',
-      //     'css-loader',
-      //     'less-loader?strictMath=on',
-      //   ]
-      // },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
         loader: 'url-loader',

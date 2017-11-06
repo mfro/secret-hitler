@@ -2,13 +2,15 @@
     <uikit:simple-page>
         <span slot="header">Select 2 policies to pass to the chancellor</span>
 
-        <div class="cards">
-            <policy-card v-for="(card, i) in session.presidentCards" :key="i" :policy="card" @input="select(i)" :class="{ active: selected.indexOf(i) != -1 }"/>
-        </div>
+        <v-layout align-center py-3 pl-3>
+            <v-flex v-for="(card, i) in session.presidentCards" :key="i" class="card-box mr-3">
+                <policy-card :policy="card" @input="select(i)" :class="{ active: selected.indexOf(i) != -1 }"/>
+            </v-flex>
+        </v-layout>
 
-        <div slot="footer" class="bottom">
-            <uikit:button :disabled="!isReady" @click="submit()">Submit</uikit:button>
-        </div>
+        <v-layout slot="footer" align-center justify-center>
+            <v-btn :disabled="!isReady" @click="submit()">Submit</v-btn>
+        </v-layout>
     </uikit:simple-page>
 </template>
 
@@ -69,33 +71,14 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less" module>
 @import "~style";
 
-.header {
-    .state-header();
-}
+.card-box {
+    flex-basis: 0;
 
-.cards {
-    flex: 1;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    padding: 1em 1em 0 0;
-
-    > div {
-        flex: 0 1 calc(50% - 1em);
-        margin-left: 1em;
-        margin-bottom: 1em;
-
-        &.active {
-            box-shadow: 0 0 0 4px #4CAF50;
-        }
+    .active {
+        box-shadow: 0 0 0 4px #4CAF50;
     }
-}
-
-.bottom {
-    display: flex;
-    justify-content: center;
 }
 </style>

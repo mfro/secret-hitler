@@ -1,22 +1,22 @@
 <template>
-    <div class="inspect">
-        <player-selector v-model="target" :filter="filter"/>
+    <uikit:simple-page>
+        <span slot="header">Choose the next president</span>
 
-        <div class="bottom">
-            <uikit:button :disabled="!target" @click="submit()">Inspect</uikit:button>
-        </div>
-    </div>
+        <player-selector v-model="target" :filter="filter"/>
+        
+        <v-layout slot="footer" align-center justify-center>
+            <v-btn :disabled="!target" @click="submit()">Nominate</v-btn>
+        </v-layout>
+    </uikit:simple-page>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
 
-import PolicyCard from '@/ui/policy-card';
 import PlayerSelector from '@/ui/player-selector';
 
 export default {
     components: {
-        PolicyCard,
         PlayerSelector,
     },
 
@@ -49,7 +49,7 @@ export default {
 };
 </script>
 
-<style scoped lang="less">
+<style module lang="less">
 @import "~style";
 
 .preview-deck {

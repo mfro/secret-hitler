@@ -3,7 +3,7 @@ import * as actions from '.';
 import { GameState } from '../game';
 
 interface Args {
-    response: boolean;
+    response: boolean | null;
 }
 
 actions.declare<Args>('LEGISLATURE_VETO', ctx => {
@@ -15,6 +15,9 @@ actions.declare<Args>('LEGISLATURE_VETO', ctx => {
     if (ctx.sender == session.president) {
         if (!session.vetoRequested)
             return actions.error(ctx, `accepted veto when none was requested`);
+            
+        if (typeof ctx.params.response != 'boolean')
+        return actions.error(ctx, `invalid veto response ${ctx.params.response}`);
 
         session.vetoAccepted = ctx.params.response;
     } else if (ctx.sender == session.chancellor) {

@@ -4,9 +4,14 @@ import Vuex from 'vuex';
 const state = {
     game: null,
     results: [],
+    connection: null,
 };
 
 const getters = {
+    connection(state) {
+        return state.connection;
+    },
+    
     game(state) {
         return state.game;
     },
@@ -15,20 +20,36 @@ const getters = {
         return state.results;
     },
 
-    getPlayer: (state) => (id) => {
-        if (!state.game) return null;
-    
-        return state.game.players.find(p => p.id == id);
+    allPlayers() {
+        return state.game && state.game.players.sort((a, b) => {
+            return a.name.localeCompare(b.name);
+        });
     },
 
-    localPlayer(state) {
+    getPlayer: (state, getters) => (id) => {
+        if (!state.game) return null;
+    
+        return getters.allPlayers.find(p => p.id == id);
+    },
+
+    localPlayer(state, getters) {
         if (!state.game) return null;
 
-        return state.game.players.find(p => p.isLocalPlayer);
+        return getters.allPlayers.find(p => p.isLocalPlayer);
     }
 };
 
 const mutations = {
+    RESET(state) {
+        state.game = null;
+        state.results = [];
+        state.connection = null;
+    },
+
+    SET_CONNECTION(state, value) {
+        state.connection = value;
+    },
+
     SET_GAME(state, value) {
         state.game = value;
     },

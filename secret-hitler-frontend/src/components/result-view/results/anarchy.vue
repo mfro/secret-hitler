@@ -1,10 +1,10 @@
 <template>
-    <div class="anarcy">
+    <div class="anarchy pa-3">
         <div class="info">
             <span>A {{ type }} policy was enacted by anarchy</span>
         </div>
 
-        <div class="card-container">
+        <div class="card-container mt-3">
             <policy-card :policy="args.policy"/>
         </div>
     </div>
@@ -38,23 +38,20 @@ export default {
 };
 </script>
 
-<style scoped lang="less">
+<style module lang="less">
 @import "~style";
-
-.anarcy {
-    padding: 1em;
-}
 
 .info {
     .text();
 }
 
 .card-container {
-    margin-top: 1em;
-    height: 16em;
-
     display: flex;
-    flex-direction: column;
     align-items: center;
+    justify-content: center;
+}
+
+.card {
+    height: 16em;
 }
 </style>

@@ -1,11 +1,11 @@
 <template>
-    <div class="enact">
+    <div class="enact pa-3">
         <div class="info">
             <span>A {{ type }} policy was enacted</span>
         </div>
 
-        <div class="card-container">
-            <policy-card :policy="args.policy"/>
+        <div class="card-container mt-3">
+            <policy-card class="card" :policy="args.policy"/>
         </div>
     </div>
 </template>
@@ -38,23 +38,20 @@ export default {
 };
 </script>
 
-<style scoped lang="less">
+<style module lang="less">
 @import "~style";
-
-.enact {
-    padding: 1em;
-}
 
 .info {
     .text();
 }
 
 .card-container {
-    margin-top: 1em;
-    height: 16em;
-
     display: flex;
-    flex-direction: column;
     align-items: center;
+    justify-content: center;
+}
+
+.card {
+    height: 16em;
 }
 </style>

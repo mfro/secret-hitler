@@ -4,9 +4,9 @@
         
         <player-selector v-model="selected" :filter="isValid"/>
 
-        <div slot="footer" class="bottom">
-            <uikit:button :disabled="!selected" @click="nominate()">Nominate</uikit:button>
-        </div>
+        <v-layout slot="footer" align-center justify-center>
+            <v-btn :disabled="!selected" @click="nominate()">Nominate</v-btn>
+        </v-layout>
     </uikit:simple-page>
 
     <uikit:simple-page v-else>
@@ -17,12 +17,10 @@
 <script>
 import { mapGetters } from 'vuex';
 
-import Player from './player';
 import PlayerSelector from '@/ui/player-selector';
 
 export default {
     components: {
-        Player,
         PlayerSelector,
     },
 
@@ -60,16 +58,12 @@ export default {
 };
 </script>
 
-<style scoped lang="less">
+<style module lang="less">
 @import "~style";
 
 .nominating-view {
     width: 100%;
     height: 100%;
-}
-
-.header {
-    .state-header();
 }
 
 .is-president {

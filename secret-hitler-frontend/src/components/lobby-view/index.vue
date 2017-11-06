@@ -1,18 +1,23 @@
 <template>
     <uikit:simple-page>
-        <span slot="header">Game lobby</span>
+        <span slot="header">Game lobby: {{ game.name }}</span>
         
-        <div class="contents">
-            <player :id="localPlayer.id" />
+        <v-layout wrap align-start align-content-start>
+            <v-layout v-for="player in players" :key="player.id"
+                align-center px-3 py-2
+                class="player">
+                <v-icon medium class="icon green--text" v-if="player.isReady">check</v-icon>
+                <v-icon medium class="icon red--text" v-else>clear</v-icon>
 
-            <player v-for="player in others" :key="player.id" :id="player.id" />
-        </div>
+                <span class="player-name ml-3">{{ player.name }}</span>
+            </v-layout>
+        </v-layout>
 
         <div slot="footer" class="controls">
-            <uikit:button @click="cancel()">Cancel</uikit:button>
+            <v-btn @click="cancel()">Cancel</v-btn>
 
-            <uikit:button v-if="localPlayer.isReady" @click="ready(false)">Not ready</uikit:button>
-            <uikit:button v-else @click="ready(true)">Ready</uikit:button>
+            <v-btn v-if="localPlayer.isReady" @click="ready(false)">Not ready</v-btn>
+            <v-btn v-else @click="ready(true)">Ready</v-btn>
         </div>
     </uikit:simple-page>
 </template>
@@ -20,36 +25,48 @@
 <script>
 import { mapGetters } from 'vuex';
 
-import Player from './player';
-
 export default {
     name: 'LobbyView',
-
-    components: {
-        Player,
-    },
 
     computed: {
         ...mapGetters({
             game: 'game',
+            allPlayers: 'allPlayers',
             localPlayer: 'localPlayer',
         }),
 
+        players() {
+            return [this.localPlayer, ...this.others];
+        },
+
         others() {
-            return this.game.players.filter(p => p != this.localPlayer);
-        }
+            return this.allPlayers.filter(p => p != this.localPlayer);
+        },
     },
 
     methods: {
         ready(isReady) {
             this.$send('SET_READY', { isReady });
-        }
-    }
+        },
+
+        cancel() {
+            this.$store.commit('RESET');
+        },
+    },
 };
 </script>
 
-<style scoped lang="less">
+<style module lang="less">
 @import "~style";
+
+.player {
+    flex-basis: 51%;
+    
+    .icon {
+        transition: none;
+        font-weight: bold;
+    }
+}
 
 .controls {
     display: flex;
