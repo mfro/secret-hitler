@@ -15,9 +15,9 @@ import * as role_liberal3 from './assets/role/liberal4.png';
 import * as role_liberal4 from './assets/role/liberal5.png';
 import * as role_liberal5 from './assets/role/liberal5.png';
 
-import * as vote_back from './assets/votes/back.png';
-import * as vote_ja from './assets/votes/ja.png';
-import * as vote_nein from './assets/votes/nein.png';
+import * as vote_back from './assets/vote/back.png';
+import * as vote_ja from './assets/vote/ja.png';
+import * as vote_nein from './assets/vote/nein.png';
 
 import * as policy_back from './assets/policy/back.png';
 import * as policy_liberal from './assets/policy/liberal.png';

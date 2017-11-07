@@ -1,22 +1,26 @@
 <template>
-    <div class="enact pa-3">
-        <div class="info">
-            <span>A {{ type }} policy was enacted</span>
-        </div>
+    <uikit:simple-page no-footer>
+        <span slot="header">A {{ policy }} policy was enacted
+            <template v-if="!args.government">by anarchy</template>
+        </span>
 
-        <div class="card-container mt-3">
+        <government v-if="args.government" :government="args.government"/>
+
+        <v-layout align-center justify-center>
             <policy-card class="card" :policy="args.policy"/>
-        </div>
-    </div>
+        </v-layout>
+    </uikit:simple-page>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
 
+import Government from '@/ui/government';
 import PolicyCard from '@/ui/policy-card';
 
 export default {
     components: {
+        Government,
         PolicyCard,
     },
 
@@ -31,7 +35,7 @@ export default {
             localPlayer: 'localPlayer',
         }),
 
-        type() {
+        policy() {
             return this.args.policy.toLowerCase();
         },
     },
@@ -43,12 +47,6 @@ export default {
 
 .info {
     .text();
-}
-
-.card-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 .card {

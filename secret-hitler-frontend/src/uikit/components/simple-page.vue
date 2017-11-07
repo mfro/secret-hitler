@@ -1,5 +1,5 @@
 <template>
-    <v-layout column class="simple-page">
+    <v-layout fill-height column>
         <div class="header mx-3 mt-3" v-if="!noHeader">
             <slot name="header"/>
         </div>
@@ -26,13 +26,6 @@ export default {
 
 <style module lang="less">
 @import "~style";
-
-.simple-page {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-}
 
 .header {
     .state-header();

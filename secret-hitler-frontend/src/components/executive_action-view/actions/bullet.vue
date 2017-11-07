@@ -2,7 +2,7 @@
     <uikit:simple-page>
         <span slot="header">Choose a player to assassinate</span>
 
-        <player-selector v-model="target" :filter="filter"/>
+        <player-selector v-model="target"/>
         
         <v-layout slot="footer" align-center justify-center>
             <v-btn :disabled="!target" @click="submit()">Shoot</v-btn>
@@ -38,10 +38,6 @@ export default {
     },
 
     methods: {
-        filter(p) {
-            return p.isAlive;
-        },
-
         submit() {
             this.$send('SET_ACTION_TARGET', { target: this.target.id });
         },

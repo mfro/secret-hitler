@@ -1,9 +1,7 @@
 <template>
-    <div class="investigation pa-3">
-        <div class="info">
-            <span>The president investigated {{ player.name }}</span>
-        </div>
-    </div>
+    <uikit:simple-page no-footer>
+        <span slot="header">{{target.name }} was shot by {{ president.name }}</span>
+    </uikit:simple-page>
 </template>
 
 <script>
@@ -27,8 +25,12 @@ export default {
             localPlayer: 'localPlayer',
         }),
 
-        player() {
-            return this.getPlayer(this.args.player);
+        president() {
+            return this.getPlayer(this.args.president);
+        },
+
+        target() {
+            return this.getPlayer(this.args.target);
         },
     },
 };
@@ -36,8 +38,4 @@ export default {
 
 <style module lang="less">
 @import "~style";
-
-.info {
-    .text();
-}
 </style>

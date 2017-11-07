@@ -1,15 +1,21 @@
 <template>
-    <div class="enact pa-3">
-        <div class="info">
-            <span>The legislature agreed to a veto</span>
-        </div>
-    </div>
+    <uikit:simple-page no-footer>
+        <span slot="header">The legislature agreed to a veto</span>
+
+        <government :government="args"/>
+    </uikit:simple-page>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
 
+import Government from '@/ui/government';
+
 export default {
+    components: {
+        Government,
+    },
+
     props: {
         args: Object,
     },
@@ -26,8 +32,4 @@ export default {
 
 <style module lang="less">
 @import "~style";
-
-.info {
-    .text();
-}
 </style>

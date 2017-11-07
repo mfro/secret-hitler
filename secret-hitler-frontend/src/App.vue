@@ -1,6 +1,6 @@
 <template>
     <v-app>
-        <v-toolbar app dark class="accent">
+        <v-toolbar app fixed dark class="accent">
             <v-toolbar-side-icon v-if="isStarted" @click="drawer = !drawer"></v-toolbar-side-icon>
             <v-toolbar-title>Secret Hitler</v-toolbar-title>
             <v-spacer></v-spacer>

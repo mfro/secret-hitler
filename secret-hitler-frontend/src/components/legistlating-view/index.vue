@@ -32,6 +32,8 @@
         </div>
 
         <div class="bystander" v-else>
+            <government :president="president" :chancellor="chancellor"/>
+
             <div class="header">
                 <span>The legislature is in session</span>
             </div>
@@ -43,6 +45,7 @@
 import { mapGetters } from 'vuex';
 
 import PolicyCard from '@/ui/policy-card';
+import Government from '@/ui/government';
 
 import PresidentPolicies from './president-policies';
 import ChancellorPolicies from './chancellor-policies';
@@ -50,6 +53,7 @@ import ChancellorPolicies from './chancellor-policies';
 export default {
     components: {
         PolicyCard,
+        Government,
         PresidentPolicies,
         ChancellorPolicies,
     },
@@ -57,15 +61,24 @@ export default {
     computed: {
         ...mapGetters({
             game: 'game',
+            getPlayer: 'getPlayer',
             localPlayer: 'localPlayer',
         }),
+
+        president() {
+            return this.getPlayer(this.session.president);
+        },
+
+        chancellor() {
+            return this.getPlayer(this.session.chancellor);
+        },
 
         session() {
             return this.game.legislature;
         },
 
         state() {
-            if (this.session.president == this.localPlayer.id) {
+            if (this.president.isLocalPlayer) {
                 if (this.session.vetoRequested && this.session.vetoAccepted === null)
                     return 'pres_veto';
                 if (this.session.chancellorCards == null)
@@ -73,7 +86,7 @@ export default {
                 return 'pres_waiting';
             }
 
-            if (this.session.chancellor == this.localPlayer.id) {
+            if (this.chancellor.isLocalPlayer) {
                 if (this.session.vetoRequested && this.session.vetoAccepted === null)
                     return 'chan_veto';
                 if (this.session.chancellorCards != null)

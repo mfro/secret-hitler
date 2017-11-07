@@ -1,26 +1,13 @@
 <template>
     <uikit:simple-page no-footer no-header>
-        <v-layout class="ballot mb-2" column align-center>
-            <v-layout column justify-center class="president">
-                <div class="image"/>
-                <span class="title name">Max</span>
-            </v-layout>
-            <v-layout column justify-center class="chancellor">
-                <div class="image"/>
-                <span class="title name">Also max</span>
-            </v-layout>                
-        </v-layout>
+        <government :president="president" :chancellor="chancellor"/>
 
-        <v-layout wrap align-start align-content-start v-if="localPlayer.hasVoted">
-            <v-layout v-for="player in players" :key="player.id"
-                align-center px-3 py-2
-                class="player">
-                <v-icon medium class="icon green--text" v-if="player.hasVoted">check</v-icon>
-                <v-icon medium class="icon red--text" v-else>clear</v-icon>
-
-                <span class="player-name ml-3">{{ player.name }}</span>
-            </v-layout>
-        </v-layout>
+        <player-list v-if="localPlayer.hasVoted">
+            <template slot="icon" slot-scope="{ player }">
+                <v-icon medium class="green--text" v-if="player.hasVoted">check</v-icon>
+                <v-icon medium class="red--text" v-else>clear</v-icon>
+            </template>
+        </player-list>
             
         <v-layout align-center justify-center v-else class="pl-3">
             <voting-card class="card mr-3" @input="vote" :vote="true"/>
@@ -33,10 +20,14 @@
 import { mapGetters } from 'vuex';
 
 import VotingCard from '@/ui/voting-card';
+import PlayerList from '@/ui/player-list';
+import Government from '@/ui/government';
 
 export default {
     components: {
         VotingCard,
+        PlayerList,
+        Government,
     },
 
     data() {
@@ -60,14 +51,6 @@ export default {
         chancellor() {
             return this.getPlayer(this.game.nomination.chancellor);
         },
-
-        players() {
-            return [this.localPlayer, ...this.others];
-        },
-
-        others() {
-            return this.allPlayers.filter(p => p != this.localPlayer && p.isAlive);
-        }
     },
 
     methods: {
@@ -86,7 +69,7 @@ export default {
 }
 
 .president, .chancellor {
-    width: 70%;
+    width: 60%;
     margin-top: @spacer;
 
     .image {

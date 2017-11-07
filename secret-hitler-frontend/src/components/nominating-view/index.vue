@@ -11,6 +11,10 @@
 
     <uikit:simple-page v-else>
         <span slot="header">{{ president.name}} is nominating a chancellor</span>
+
+        <v-flex mt-5>
+            <government :president="president"/>
+        </v-flex>
     </uikit:simple-page>
 </template>
 
@@ -18,10 +22,12 @@
 import { mapGetters } from 'vuex';
 
 import PlayerSelector from '@/ui/player-selector';
+import Government from '@/ui/government';
 
 export default {
     components: {
         PlayerSelector,
+        Government,
     },
 
     data() {
@@ -48,7 +54,7 @@ export default {
 
     methods: {
         isValid(p) {
-            return p.isAlive && !p.isTermLimited && !p.isLocalPlayer;
+            return !p.isTermLimited && !p.isLocalPlayer;
         },
 
         nominate() {

@@ -2,11 +2,9 @@
     <v-layout wrap align-start align-content-start>
         <v-layout v-for="player in options" :key="player.id"
             align-center px-3 py-2
-            class="player"
-            v-touch-class
-            @click="$emit('input', player)">
-            <v-icon medium v-if="player == value">radio_button_checked</v-icon>
-            <v-icon medium v-else>radio_button_unchecked</v-icon>
+            class="player" :class="playerClass">
+            
+            <slot name="icon" class="icon" :player="player"/>
 
             <span class="player-name ml-3">{{ player.name }}</span>
         </v-layout>
@@ -18,7 +16,6 @@ import { mapGetters } from 'vuex';
 
 export default {
     props: {
-        value: Object,
         filter: { type: Function, required: false },
     },
 
@@ -37,6 +34,10 @@ export default {
                 return !this.filter || this.filter(p)
             });
         },
+
+        playerClass() {
+            return 'duplex';
+        }
     },
 };
 </script>
@@ -54,13 +55,13 @@ export default {
 
 .player {
     flex-basis: 51%;
-
-    .icon {
-        font-weight: bold;
+    
+    &.duplex {
+        flex-basis: 34%;
     }
 
-    &.touch-active {
-        background-color: rgba(0, 0, 0, .1);
+    :global(.material-icons.icon) {
+        font-weight: bold;
     }
 }
 </style>

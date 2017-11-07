@@ -1,3 +1,1 @@
-"player-list" component
- - scoped slots
- - icon and name
+log details

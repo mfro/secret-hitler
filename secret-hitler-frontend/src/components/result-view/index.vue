@@ -1,8 +1,6 @@
 <template>
     <uikit:simple-page no-header>
-        <v-flex class="contents">
-            <component :is="'result-' + result.name" :args="result.args"/>
-        </v-flex>
+        <event-details :event="result"/>
 
         <v-layout slot="footer" align-center justify-center>
             <v-btn @click="accept()">Ok</v-btn>
@@ -11,25 +9,11 @@
 </template>
 
 <script>
-import ResultVote from './results/vote';
-import ResultVeto from './results/veto';
-import ResultEnact from './results/enact';
-import ResultAnarchy from './results/anarchy';
-import ResultInvestigation from './results/investigation';
-import ResultAssassination from './results/assassination';
-import ResultRoleAssignment from './results/role-assignment';
-import ResultSpecialElection from './results/special-election';
+import EventDetails from '@/ui/events/details';
 
 export default {
     components: {
-        ResultVote,
-        ResultVeto,
-        ResultEnact,
-        ResultAnarchy,
-        ResultInvestigation,
-        ResultAssassination,
-        ResultRoleAssignment,
-        ResultSpecialElection
+        EventDetails
     },
 
     props: {

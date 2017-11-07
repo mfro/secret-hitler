@@ -62,7 +62,7 @@ export default {
 
     methods: {
         filter(p) {
-            return p != this.localPlayer && p.isAlive;
+            return p != this.localPlayer;
         },
 
         submit() {

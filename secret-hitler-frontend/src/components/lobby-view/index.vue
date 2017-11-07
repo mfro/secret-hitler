@@ -2,31 +2,33 @@
     <uikit:simple-page>
         <span slot="header">Game lobby: {{ game.name }}</span>
         
-        <v-layout wrap align-start align-content-start>
-            <v-layout v-for="player in players" :key="player.id"
-                align-center px-3 py-2
-                class="player">
-                <v-icon medium class="icon green--text" v-if="player.isReady">check</v-icon>
-                <v-icon medium class="icon red--text" v-else>clear</v-icon>
+        <player-list>
+            <template slot="icon" slot-scope="{ player }">
+                <v-icon medium class="green--text" v-if="player.isReady">check</v-icon>
+                <v-icon medium class="red--text" v-else>clear</v-icon>
+            </template>
+        </player-list>
 
-                <span class="player-name ml-3">{{ player.name }}</span>
-            </v-layout>
-        </v-layout>
-
-        <div slot="footer" class="controls">
+        <v-layout slot="footer" align-center justify-center>
             <v-btn @click="cancel()">Cancel</v-btn>
 
             <v-btn v-if="localPlayer.isReady" @click="ready(false)">Not ready</v-btn>
             <v-btn v-else @click="ready(true)">Ready</v-btn>
-        </div>
+        </v-layout>
     </uikit:simple-page>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
 
+import PlayerList from '@/ui/player-list';
+
 export default {
     name: 'LobbyView',
+
+    components: {
+        PlayerList,
+    },
 
     computed: {
         ...mapGetters({
@@ -58,22 +60,4 @@ export default {
 
 <style module lang="less">
 @import "~style";
-
-.player {
-    flex-basis: 51%;
-    
-    .icon {
-        transition: none;
-        font-weight: bold;
-    }
-}
-
-.controls {
-    display: flex;
-    justify-content: center;
-
-    > button {
-        margin: 0 0.5em;
-    }
-}
 </style>
