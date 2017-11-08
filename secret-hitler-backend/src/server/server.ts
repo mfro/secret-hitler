@@ -22,7 +22,7 @@ function onConnect(base: WebSocket, req: http.IncomingMessage) {
         context.on('complete', () => contexts.delete(context.game.name));
         return;
     }
-    
+
     if (info.pathname == '/join') {
         let name = info.query.name;
         let game = info.query.game;
@@ -33,7 +33,7 @@ function onConnect(base: WebSocket, req: http.IncomingMessage) {
         context.join(base, name);
         return;
     }
-    
+
     if (info.pathname == '/rejoin') {
         let id = parseInt(info.query.id);
         let game = info.query.game;
@@ -43,6 +43,15 @@ function onConnect(base: WebSocket, req: http.IncomingMessage) {
 
         context.rejoin(base, id);
         return;
+    }
+
+    if (info.pathname == '/watch') {
+        let game = info.query.game;
+
+        let context = contexts.get(game);
+        if (context == null) return base.close();
+
+        context.watch(base);
     }
 }
 
@@ -77,13 +86,23 @@ function shouldHandle(req: http.IncomingMessage) {
         return context.canRejoin(id);
     }
 
+    if (info.pathname == '/watch') {
+        let game = info.query.game;
+
+        let context = contexts.get(game);
+        if (context == null)
+            return false;
+
+        return true;
+    }
+
     return false;
 };
 
 export function start() {
     const port = 8081;
     const httpServer = http.createServer();
-    
+
     const wsServer = new WebSocket.Server({
         port: port,
         server: httpServer,

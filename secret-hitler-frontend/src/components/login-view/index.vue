@@ -3,12 +3,13 @@
         <div class="logo" />
 
         <v-container>
-            <v-text-field v-model="gameCode" label="Game code"/>
+            <v-text-field v-model="gameCode" label="Game code" type="number"/>
             <v-text-field v-model="name" label="Name"/>
             
             <v-layout justify-space-around mt-3>
                 <template v-if="!connection">
                     <v-btn @click="create()">Create</v-btn>
+                    <v-btn @click="watch()">Watch</v-btn>
                     <v-btn @click="join()">Join</v-btn>
                 </template>
 
@@ -57,6 +58,10 @@ export default {
             } catch (e) { }
 
             socket.create(this.name);
+        },
+
+        watch() {
+            socket.watch(this.gameCode);
         },
 
         join() {

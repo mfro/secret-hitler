@@ -45,6 +45,10 @@ export class CardPool {
         return this.drawPile.size;
     }
 
+    get discardSize() {
+        return this.discardPile.size;
+    }
+
     check() {
         if (this.drawPile.size < 3) {
             this.drawPile = Pile.combine(this.drawPile, this.discardPile);

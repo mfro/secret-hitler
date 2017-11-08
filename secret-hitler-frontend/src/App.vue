@@ -1,7 +1,11 @@
 <template>
-    <v-app>
+    <spectator-view v-if="isWatching"/>
+    <v-app v-else>
         <v-toolbar app fixed dark class="accent">
-            <v-toolbar-side-icon v-if="isStarted" @click="drawer = !drawer"></v-toolbar-side-icon>
+            <v-toolbar-side-icon v-if="backDst" @click="back()">
+                <v-icon>arrow_back</v-icon>
+            </v-toolbar-side-icon>
+            <v-toolbar-side-icon v-else-if="isStarted" @click="drawer = !drawer"></v-toolbar-side-icon>
             <v-toolbar-title>Secret Hitler</v-toolbar-title>
             <v-spacer></v-spacer>
         </v-toolbar>
@@ -34,12 +38,21 @@
                 <v-list>
                     <v-divider/>
 
-                    <v-list-tile v-for="arg in navs" :key="arg.id" @click="nav(arg.id)" :class="{ navActive: force == arg.id }">
+                    <v-list-tile v-for="arg in navs" :key="arg.path" :to="arg.path">
                         <v-list-tile-action>
                             <v-icon v-text="arg.icon"/>
                         </v-list-tile-action>
                         <v-list-tile-content>
-                            <v-list-tile-title v-text="arg.label"/>
+                            <v-list-tile-title>{{ arg.label }}</v-list-tile-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+
+                    <v-list-tile v-if="game">
+                        <v-list-tile-action>
+                            <v-icon>videogame_asset</v-icon>
+                        </v-list-tile-action>
+                        <v-list-tile-content>
+                            <v-list-tile-title>Game lobby: {{ game.name }}</v-list-tile-title>
                         </v-list-tile-content>
                     </v-list-tile>
                 </v-list>
@@ -48,15 +61,7 @@
 
         <main>
             <v-content class="content">
-                <log-view v-if="force == 'log'"/>
-
-                <assignment-view v-else-if="force == 'role'"/>
-
-                <result-view :result="result" v-else-if="result"/>
-
-                <component :is="`${page}-view`" v-else-if="page"/>
-
-                <span class="raw" v-else>{{ game }}</span>
+                <router-view></router-view>
             </v-content>
         </main>
     </v-app>
@@ -67,18 +72,7 @@ import { mapGetters } from 'vuex';
 
 import * as socket from '@/socket';
 
-import LobbyView from '@/components/lobby-view';
-import NominatingView from '@/components/nominating-view';
-import LegislatingView from '@/components/legistlating-view';
-import VotingView from '@/components/voting-view';
-import LoginView from '@/components/login-view';
-import ExecutiveActionView from '@/components/executive_action-view';
-import CompletedView from '@/components/completed-view';
-
-import ResultView from '@/components/result-view';
-
-import LogView from '@/components/log-view';
-import AssignmentView from '@/components/assignment-view';
+import SpectatorView from '@/components/spectator-view';
 
 import PolicyCard from '@/ui/policy-card';
 
@@ -86,27 +80,17 @@ export default {
     name: 'SecretHitler',
 
     components: {
-        LobbyView,
-        NominatingView,
-        LegislatingView,
-        VotingView,
-        LoginView,
-        ResultView,
-        ExecutiveActionView,
-        CompletedView,
         PolicyCard,
-        LogView,
-        AssignmentView,
+        SpectatorView,
     },
 
     data() {
         return {
             drawer: false,
-            force: 'home',
             navs: [
-                { icon: 'home', label: 'Home', id: 'home', },
-                { icon: 'person', label: 'Role', id: 'role', },
-                { icon: 'history', label: 'Game log', id: 'log', },
+                { icon: 'home', label: 'Home', path: '/', },
+                { icon: 'person', label: 'Role', path: '/role', },
+                { icon: 'history', label: 'Game log', path: '/log', },
             ]
         };
     },
@@ -115,29 +99,16 @@ export default {
         ...mapGetters({
             game: 'game',
             results: 'results',
+            isWatching: 'isWatching',
             localPlayer: 'localPlayer',
         }),
-
-        raw() {
-            return JSON.stringify(this.game, null, 4);
-        },
-
-        page() {
-            if (!this.game)
-                return 'login';
-
-            if (this.game.state == 'EXECUTIVE_ACTION')
-                return 'executive-action';
-
-            return this.game.state.toLowerCase();
-        },
 
         isStarted() {
             return this.game != null && this.game.state != 'LOBBY';
         },
 
-        result() {
-            return this.results[0];
+        backDst() {
+            return this.$route.meta.back;
         },
     },
 
@@ -150,9 +121,8 @@ export default {
     },
 
     methods: {
-        nav(page) {
-            this.force = page;
-            this.drawer = false;
+        back() {
+            this.$router.push(this.backDst);
         }
     }
 };
@@ -180,7 +150,7 @@ export default {
 }
 
 .navActive {
-    background: #eeeeee;   
+    background: #eeeeee;
 }
 
 .raw {
@@ -192,5 +162,9 @@ export default {
 <style lang="less">
 html {
     touch-action: manipulation;
+}
+
+a {
+    text-decoration: none;
 }
 </style>

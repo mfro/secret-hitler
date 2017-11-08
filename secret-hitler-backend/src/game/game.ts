@@ -60,6 +60,7 @@ function END_TURN(game: Game) {
 
 function FINISH_LEGISLATURE(game: Game) {
     game.cardPool.check();
+    game.updateCardPool();
 
     let session = assertPresent(game.legislativeSession, 'no session in FINISH_LEGISLATURE');
 
@@ -216,6 +217,7 @@ function ANARCHY(game: Game) {
     let policy = assertPresent(game.cardPool.single(), 'empty deck in ANARCHY');
 
     game.enact(policy, undefined);
+    game.updateCardPool();
 
     game.cardPool.check();
 
@@ -291,6 +293,10 @@ function FINISH_NOMINATING(game: Game) {
 };
 
 function START_NOMINATING(game: Game) {
+    for (let player of game.allPlayers) {
+        player.vote = null;
+    }
+    
     if (game.nomination == null) {
         while (!game.allPlayers[game.nextPresident].isAlive) {
             game.nextPresident = (game.nextPresident + 1) % game.allPlayers.length;
@@ -316,6 +322,8 @@ function BEGIN_GAME(game: Game) {
         liberals: 0,
         fascists: 0,
         voteFailures: 0,
+        drawSize: game.cardPool.drawSize,
+        discardSize: game.cardPool.discardSize,
     };
 
     game.currentTurn = 1;
@@ -1184,6 +1192,8 @@ mac.update(GameState.COMPLETED, function (game) {
 export interface BoardState {
     liberals: number;
     fascists: number;
+    drawSize: number;
+    discardSize: number;
 
     voteFailures: number;
 }
@@ -1231,7 +1241,7 @@ export class Game {
     cardPool: CardPool;
     nextPresident: number;
     currentTurn: number;
-    
+
     state = GameState.LOBBY;
 
     boardState: BoardState;
@@ -1291,6 +1301,11 @@ export class Game {
         }));
     }
 
+    updateCardPool() {
+        this.boardState.drawSize = this.cardPool.drawSize;
+        this.boardState.discardSize = this.cardPool.discardSize;
+    }
+
     addPlayer(name: string) {
         if (this.state != GameState.LOBBY)
             throw new Error(`Added player ${name} in game state ${this.state}`);
@@ -1336,7 +1351,7 @@ export class Game {
         }
     }
 
-    serialize(perspective: Player) {
+    serialize(perspective: Player | null) {
         let data: any = {
             log: this.log,
             name: this.name,

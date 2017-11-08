@@ -2,12 +2,12 @@
     <v-layout class="ballot mb-2" column align-center>
 
         <v-layout column justify-center class="president" v-if="pres">
-            <div class="image"/>
+            <plaque president/>
             <span class="title name">{{ pres.name }}</span>
         </v-layout>
 
         <v-layout column justify-center class="chancellor" v-if="chan">
-            <div class="image"/>
+            <plaque chancellor/>
             <span class="title name">{{ chan.name }}</span>
         </v-layout>                
     </v-layout>
@@ -16,7 +16,13 @@
 <script>
 import { mapGetters } from 'vuex';
 
+import Plaque from '@/ui/plaque';
+
 export default {
+    components: {
+        Plaque,
+    },
+
     props: {
         government: { type: Object, default: null },
         president: { type: Object, default: null },

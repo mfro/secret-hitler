@@ -4,6 +4,7 @@ import Vuex from 'vuex';
 const state = {
     game: null,
     results: [],
+    watching: false,
     connection: null,
 };
 
@@ -11,7 +12,11 @@ const getters = {
     connection(state) {
         return state.connection;
     },
-    
+
+    isWatching(state) {
+        return state.watching && state.game != null;
+    },
+
     game(state) {
         return state.game;
     },
@@ -19,7 +24,6 @@ const getters = {
     results(state) {
         return state.results;
     },
-
     allPlayers() {
         return state.game && state.game.players.sort((a, b) => {
             return a.name.localeCompare(b.name);
@@ -28,7 +32,7 @@ const getters = {
 
     getPlayer: (state, getters) => (id) => {
         if (!state.game) return null;
-    
+
         return getters.allPlayers.find(p => p.id == id);
     },
 
@@ -41,9 +45,15 @@ const getters = {
 
 const mutations = {
     RESET(state) {
+        ws && ws.close();
         state.game = null;
         state.results = [];
+        state.watching = false;
         state.connection = null;
+    },
+
+    SET_WATCHING(state, value) {
+        state.watching = value;
     },
 
     SET_CONNECTION(state, value) {

@@ -5,8 +5,12 @@
             <v-icon medium class="icon red--text" v-else>clear</v-icon>
         </v-list-tile-action>
         <v-list-tile-content>
-            <v-list-tile-title v-if="args.pass">The vote passed</v-list-tile-title>
-            <v-list-tile-title v-else>The vote failed</v-list-tile-title>
+            <v-list-tile-title>
+                <span v-if="args.pass">The vote passed</span>
+                <span v-else>The vote failed</span>
+                <span v-text="', '"/>
+                <span>{{ args.votes.ja.length }} to {{ args.votes.nein.length }}</span>
+            </v-list-tile-title>
             <v-list-tile-sub-title>{{ president.name }} and {{ chancellor.name }}</v-list-tile-sub-title>
         </v-list-tile-content>
     </v-list-tile>

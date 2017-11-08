@@ -16,7 +16,8 @@ import { mapGetters } from 'vuex';
 
 export default {
     props: {
-        filter: { type: Function, required: false },
+        large: { type: Boolean, default: false, },
+        filter: { type: Function, default: null },
     },
 
     computed: {
@@ -30,12 +31,15 @@ export default {
             return this.allPlayers.filter(p => {
                 if (p.isAlive === false)
                     return false;
-                
+
                 return !this.filter || this.filter(p)
             });
         },
 
         playerClass() {
+            if (this.large)
+                return 'single';
+
             return 'duplex';
         }
     },
@@ -62,6 +66,7 @@ export default {
 
     :global(.material-icons.icon) {
         font-weight: bold;
+        transition: none;
     }
 }
 </style>

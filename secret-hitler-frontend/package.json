@@ -11,7 +11,8 @@
   },
   "dependencies": {
     "vue": "^2.5.3",
-    "vuex": "^2.5.0"
+    "vuex": "^2.5.0",
+    "vue-router": "^3.0.1"
   },
   "devDependencies": {
     "@mfro/promise-extensions": "^2.0.0",

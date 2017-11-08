@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import AssignmentView from '@/components/assignment-view';
+import AssignmentView from '@/router/routes/AssignmentView';
 
 export default {
     components: {

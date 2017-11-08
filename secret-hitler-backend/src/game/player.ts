@@ -33,7 +33,7 @@ export class Player {
         return this.id;
     }
 
-    serialize(perspective: Player) {
+    serialize(perspective: Player | null) {
         let data: any = {
             id: this.id,
             name: this.name,

@@ -48,14 +48,22 @@ function connect(path) {
 }
 
 export function rejoin(game, id) {
+    store.commit('SET_WATCHING', false);
     connect(`/rejoin?game=${game}&id=${id}`);
 }
 
 export function join(game, name) {
+    store.commit('SET_WATCHING', false);
     connect(`/join?game=${game}&name=${name}`);
 }
 
+export function watch(game) {
+    store.commit('SET_WATCHING', true);
+    connect('/watch?game=' + game);
+}
+
 export function create(name) {
+    store.commit('SET_WATCHING', false);
     connect('/create?name=' + name);
 }
 
@@ -72,7 +80,7 @@ function dispose() {
     let game = store.getters.game;
     if (game && game.state == 'COMPLETED')
         return;
-        
+
     localStorage.removeItem('secret-hitler/rejoin-info');
     store.commit('SET_GAME', null);
     ws = null;

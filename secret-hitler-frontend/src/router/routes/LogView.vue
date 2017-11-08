@@ -22,13 +22,14 @@ export default {
         }),
 
         log() {
-            return this.game.log.reverse();
+            return this.game.log.slice().reverse();
         }
     },
 
     methods: {
         onDetails(e) {
-            console.log(e)
+            let i = this.game.log.indexOf(e);
+            this.$router.push('/log/' + i);
         }
     }
 };
@@ -36,8 +37,4 @@ export default {
 
 <style module lang="less">
 @import "~style";
-
-.my-list :global(.list__tile) {
-    // height: 60px;
-}
 </style>

@@ -25,14 +25,20 @@ export class Context extends EventEmitter {
 
     join(base: WebSocket, name: string) {
         let player = this.game.addPlayer(name);
-        let socket = new Socket(base, player);
+        let socket = new Socket.Player(base, player);
 
         this.add(socket);
     }
 
     rejoin(base: WebSocket, id: number) {
         let player = this.game.allPlayers.find(p => p.id == id)!;
-        let socket = new Socket(base, player);
+        let socket = new Socket.Player(base, player);
+
+        this.add(socket);
+    }
+
+    watch(base: WebSocket) {
+        let socket = new Socket.Spectator(base, this.game);
 
         this.add(socket);
     }
@@ -44,7 +50,7 @@ export class Context extends EventEmitter {
 
     canRejoin(id: number) {
         let player = this.game.allPlayers.find(p => p.id == id);
-        let socket = this.sockets.find(s => s.player == player);
+        let socket = this.sockets.find(s => s instanceof Socket.Player && s.player == player);
         return player != null && socket == null;
     }
 
@@ -79,6 +85,11 @@ export class Context extends EventEmitter {
     }
 
     private handle(socket: Socket, msg: { name: string, args: any }) {
+        if (!(socket instanceof Socket.Player)) {
+            console.error('Got message from non-player socket', msg);
+            return;
+        } 
+
         let ctx = {
             game: this.game,
             params: msg.args,

@@ -1,5 +1,5 @@
 <template>
-    <card no-border :card="card" :value="true" :horizontal="horizontal" @input="$emit('input', policy)"/>
+    <card no-border :card="card" :value="policy != 'back'" :horizontal="horizontal" @input="$emit('input', policy)"/>
 </template>
 
 <script>
@@ -23,6 +23,9 @@ export default {
                 return cards.liberal_policy;
 
             if (this.policy == 'FASCIST')
+                return cards.fascist_policy;
+
+            if (this.policy == 'back')
                 return cards.fascist_policy;
         }
     }

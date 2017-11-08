@@ -1,5 +1,5 @@
 <template>
-    <div class="card" :style="style">
+    <div class="card" :style="style" v-resize="resize">
         <div class="rotation" :class="{ horizontal }" :style="rotStyle">
             <div class="flipper" :class="{ flipped: value, border: !noBorder }" @click="onClick">
                 <div class="front" :style="frontStyle" />
@@ -24,6 +24,10 @@ export default {
                 width: null,
                 height: null,
             },
+            rotStyle: {
+                width: null,
+                height: null,
+            },
         };
     },
 
@@ -39,16 +43,6 @@ export default {
                 backgroundImage: `url(${this.card.back})`,
             };
         },
-
-        rotStyle() {
-            if (!this.horizontal)
-                return this.style;
-                
-            return {
-                width: this.style.height,
-                height: this.style.width,
-            };
-        }
     },
 
     mounted() {
@@ -88,10 +82,23 @@ export default {
                     }
                 }
 
+                console.log('recompute');
                 this.style = {
                     width: Math.floor(width) + 'px',
                     height: Math.floor(height) + 'px',
                 };
+
+                if (!this.horizontal)
+                    this.rotStyle = {
+                        width: this.style.width,
+                        height: this.style.height,
+                    };
+                else {
+                    this.rotStyle = {
+                        width: Math.floor(width) + 'px',
+                        height: Math.floor(height) + 'px',
+                    };
+                }
             }, 1);
         },
 
@@ -113,11 +120,11 @@ export default {
 
 .rotation {
     position: absolute;
-    top: 50%;
-    left: 50%;
+    // top: 50%;
+    // left: 50%;
     perspective: 600px;
 
-    transform: translateX(-50%) translateY(-50%);
+    // transform: translateX(-50%) translateY(-50%);
 
     &.horizontal {
         transform: translateX(-50%) translateY(-50%) rotateZ(-90deg);
