@@ -52,12 +52,9 @@ export class Player {
             data.isTermLimited = this.termLimited;
         }
 
+        data.vote = this.vote;
         if (this.game.state == GameState.VOTING) {
             data.hasVoted = this.vote !== null;
-        }
-
-        if (this.game.state == GameState.LEGISLATING) {
-            data.vote = this.vote;
         }
 
         return data;

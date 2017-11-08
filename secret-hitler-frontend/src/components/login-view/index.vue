@@ -89,6 +89,7 @@ export default {
     background-position: center;
 
     width: 70%;
+    max-width: 25em;
     height: 30vh;
     
     filter: drop-shadow(0 0 10px gray);

@@ -29,7 +29,7 @@
                 <player-list large>
                     <template slot="icon" slot-scope="{ player }">
                         <v-icon medium class="green--text" v-if="player.isReady">check</v-icon>
-                        <v-icon medium class="red--text" v-else>clear</v-icon>
+                        <v-icon medium v-else>hourglass_empty</v-icon>
                     </template>
                 </player-list>
             </v-layout>

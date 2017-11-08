@@ -43,8 +43,6 @@ export default {
         }),
 
         score() {
-            return 6;
-
             if (this.type == 'LIBERAL')
                 return this.game.boardState.liberals;
 
@@ -107,7 +105,7 @@ export default {
 
 .stack-container {
     padding: 0 @spacer;
-    flex: 0 0 auto;
+    flex: 1 0 auto;
     align-items: center;
     justify-content: center;
 }

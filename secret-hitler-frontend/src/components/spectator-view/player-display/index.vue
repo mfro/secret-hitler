@@ -9,8 +9,8 @@
 
                 <v-layout justify-end align-center class="header-spacer">
                     <template v-if="game.state == 'VOTING'">
-                        <v-icon medium v-if="player.hasVoted" class="voted green--text">check</v-icon>
-                        <v-icon medium v-else class="voted">hourglass_empty</v-icon>
+                        <!-- <v-icon medium v-if="player.hasVoted" class="voted green--text">check</v-icon> -->
+                        <v-icon medium v-if="!player.hasVoted" class="voted">hourglass_empty</v-icon>
                     </template>
 
                     <template v-else-if="player.vote !== null">
