@@ -21,6 +21,8 @@
 <script>
 import { mapGetters } from 'vuex';
 
+import * as socket from '@/socket';
+
 import PlayerList from '@/ui/player-list';
 
 export default {
@@ -52,7 +54,7 @@ export default {
         },
 
         cancel() {
-            this.$store.commit('RESET');
+            socket.reset();
         },
     },
 };

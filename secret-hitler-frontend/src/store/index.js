@@ -45,7 +45,6 @@ const getters = {
 
 const mutations = {
     RESET(state) {
-        ws && ws.close();
         state.game = null;
         state.results = [];
         state.watching = false;

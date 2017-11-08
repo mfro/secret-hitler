@@ -47,6 +47,10 @@ function connect(path) {
     store.commit('SET_CONNECTION', 'CONNECTING');
 }
 
+export function reset() {
+    dispose();
+}
+
 export function rejoin(game, id) {
     store.commit('SET_WATCHING', false);
     connect(`/rejoin?game=${game}&id=${id}`);
@@ -75,6 +79,9 @@ export function send(name, args) {
 }
 
 function dispose() {
+    if (ws && ws.readyState == WebSocket.OPEN)
+        ws.close();
+
     store.commit('SET_CONNECTION', null);
 
     let game = store.getters.game;
