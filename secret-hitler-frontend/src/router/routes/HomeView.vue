@@ -1,5 +1,5 @@
 <template>
-    <result-view :result="result" v-if="result"/>
+    <result-view :result="result" v-if="game && result"/>
 
     <component :is="`${page}-view`" v-else-if="page"/>
 
@@ -8,6 +8,8 @@
 
 <script>
 import { mapGetters } from 'vuex';
+
+import * as debug from '@/debug';
 
 import LobbyView from '@/components/lobby-view';
 import NominatingView from '@/components/nominating-view';
@@ -54,7 +56,16 @@ export default {
         },
 
         result() {
-            return this.results[0];
+            if (!debug.isDebug)
+                return this.results[0];
+
+            return {
+                name: 'assassination',
+                args: {
+                    president: 17,
+                    target: 19,
+                },
+            };
         },
     }
 };

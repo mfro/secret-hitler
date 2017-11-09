@@ -1,6 +1,7 @@
 <template>
     <uikit:simple-page no-footer>
-        <span slot="header">The legislature agreed to a veto</span>
+        <span slot="header" v-if="args.agree">The legislature agreed to a veto</span>
+        <span slot="header" v-else>The president denied a veto</span>
 
         <government :government="args"/>
     </uikit:simple-page>

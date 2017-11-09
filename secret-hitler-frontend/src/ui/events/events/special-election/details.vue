@@ -1,6 +1,14 @@
 <template>
     <uikit:simple-page no-footer>
         <span slot="header">{{target.name }} was nominated as president by {{ president.name }}</span>
+
+        <v-layout column justify-center>
+            <government :president="president"/>
+
+            <v-icon class="arrow">arrow_downward</v-icon>
+
+            <government :president="target"/>
+        </v-layout>
     </uikit:simple-page>
 </template>
 
@@ -8,10 +16,12 @@
 import { mapGetters } from 'vuex';
 
 import PolicyCard from '@/ui/policy-card';
+import Government from '@/ui/government';
 
 export default {
     components: {
         PolicyCard,
+        Government,
     },
 
     props: {
@@ -38,4 +48,9 @@ export default {
 
 <style module lang="less">
 @import "~style";
+
+.arrow {
+    font-size: 4em;
+    margin: @spacer 0;
+}
 </style>

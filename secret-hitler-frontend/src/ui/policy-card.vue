@@ -1,5 +1,5 @@
 <template>
-    <card no-border :card="card" :value="policy != 'back'" :horizontal="horizontal" @input="$emit('input', policy)"/>
+    <card :basis="basis" no-border :card="card" :value="policy != 'back'" :horizontal="horizontal" @input="$emit('input', policy)"/>
 </template>
 
 <script>
@@ -13,6 +13,7 @@ export default {
     },
 
     props: {
+        basis: String,
         policy: String,
         horizontal: { type: Boolean, default: false, },
     },

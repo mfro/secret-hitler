@@ -1,5 +1,5 @@
 <template>
-    <card no-border :card="card" :value="true" :horizontal="horizontal" @input="$emit('input', vote)"/>
+    <card :basis="basis" no-border :card="card" :value="true" :horizontal="horizontal" @input="$emit('input', vote)"/>
 </template>
 
 <script>
@@ -14,6 +14,7 @@ export default {
 
     props: {
         vote: Boolean,
+        basis: String,
         horizontal: { type: Boolean, default: false },
     },
 

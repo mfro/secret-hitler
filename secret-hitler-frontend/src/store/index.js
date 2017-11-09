@@ -24,6 +24,7 @@ const getters = {
     results(state) {
         return state.results;
     },
+    
     allPlayers() {
         return state.game && state.game.players.sort((a, b) => {
             return a.name.localeCompare(b.name);

@@ -8,7 +8,7 @@
             <div class="image" :class="image"/>
 
             <div class="cards">
-                <policy-card class="card" :policy="type" v-for="i in score" :key="i" :style="style(i - 1)"/>
+                <policy-card basis="long" class="card" :policy="type" v-for="i in score" :key="i" :style="style(i - 1)"/>
             </div>
 
             <div class="tracker" :style="trackerStyle" v-if="type == 'LIBERAL'"><div/></div>

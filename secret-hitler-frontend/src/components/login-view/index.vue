@@ -9,7 +9,7 @@
             <v-layout justify-space-around mt-3>
                 <template v-if="!connection">
                     <v-btn @click="create()">Create</v-btn>
-                    <v-btn @click="watch()">Watch</v-btn>
+                    <v-btn class="watch" @click="watch()">Watch</v-btn>
                     <v-btn @click="join()">Join</v-btn>
                 </template>
 
@@ -93,6 +93,12 @@ export default {
     height: 30vh;
     
     filter: drop-shadow(0 0 10px gray);
+}
+
+.watch {
+    @media screen and (max-width: 600px) {
+        display: none;
+    }
 }
 
 .raw {

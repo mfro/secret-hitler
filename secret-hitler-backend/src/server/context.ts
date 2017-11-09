@@ -88,7 +88,7 @@ export class Context extends EventEmitter {
         if (!(socket instanceof Socket.Player)) {
             console.error('Got message from non-player socket', msg);
             return;
-        } 
+        }
 
         let ctx = {
             game: this.game,
@@ -96,9 +96,7 @@ export class Context extends EventEmitter {
             sender: socket.player,
         };
 
-        return actions.invoke(msg.name, ctx).then(() => {
-            this.sync();
-        }, e => {
+        return actions.invoke(msg.name, ctx).catch(e => {
             console.error(e);
         }).finally(() => {
             try {

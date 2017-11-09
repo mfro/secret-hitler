@@ -6,6 +6,7 @@ import router from './router';
 import * as cards from './cards';
 import * as socket from './socket';
 
+import './debug';
 import './uikit';
 import extend from '@mfro/promise-extensions';
 

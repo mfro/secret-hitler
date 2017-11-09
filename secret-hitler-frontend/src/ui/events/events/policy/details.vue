@@ -7,7 +7,7 @@
         <government v-if="args.government" :government="args.government"/>
 
         <v-layout align-center justify-center>
-            <policy-card class="card" :policy="args.policy"/>
+            <policy-card basis="long" class="card" :policy="args.policy"/>
         </v-layout>
     </uikit:simple-page>
 </template>

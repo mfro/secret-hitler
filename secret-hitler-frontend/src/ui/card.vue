@@ -14,6 +14,7 @@ export default {
     props: {
         card: Object,
         value: Boolean,
+        basis: { type: String, default: 'short' },
         noBorder: { type: Boolean, default: false },
         horizontal: { type: Boolean, default: false },
     },
@@ -21,10 +22,6 @@ export default {
     data() {
         return {
             style: {
-                width: null,
-                height: null,
-            },
-            rotStyle: {
                 width: null,
                 height: null,
             },
@@ -43,6 +40,16 @@ export default {
                 backgroundImage: `url(${this.card.back})`,
             };
         },
+
+        rotStyle() {
+            if (!this.horizontal)
+                return this.style;
+
+            return {
+                width: this.style.height,
+                height: this.style.width,
+            };
+        }
     },
 
     mounted() {
@@ -53,53 +60,35 @@ export default {
         resize() {
             this.style.width = this.style.height = null;
 
-            setTimeout(() => {
-                let box = this.$el.getBoundingClientRect();
+            let box = this.$el.getBoundingClientRect();
 
-                let src = {
-                    width: box.width,
-                    height: box.height,
-                };
+            let src = {
+                width: box.width,
+                height: box.height,
+            };
 
-                let ratio = 256 / 355;
+            let ratio = 256 / 355;
 
-                let width, height;
-                if (this.horizontal) {
-                    if (box.width < 10) {
-                        width = box.height * ratio;
-                        height = box.height;
-                    } else {
-                        width = box.width;
-                        height = box.width * ratio;
-                    }
-                } else {
-                    if (box.width < 10) {
-                        width = box.height * ratio;
-                        height = box.height;
-                    } else {
-                        width = box.width;
-                        height = box.width / ratio;
-                    }
-                }
+            let width, height;
+            if (this.horizontal) {
+                if (this.basis == 'long')
+                    height = box.width * ratio;
 
-                console.log('recompute');
-                this.style = {
-                    width: Math.floor(width) + 'px',
-                    height: Math.floor(height) + 'px',
-                };
+                else
+                    width = box.height / ratio;
+            } else {
+                if (this.basis == 'long')
+                    width = box.height * ratio;
 
-                if (!this.horizontal)
-                    this.rotStyle = {
-                        width: this.style.width,
-                        height: this.style.height,
-                    };
-                else {
-                    this.rotStyle = {
-                        width: Math.floor(width) + 'px',
-                        height: Math.floor(height) + 'px',
-                    };
-                }
-            }, 1);
+                else
+                    height = box.width / ratio;
+            }
+
+            console.log('recompute');
+            this.style = {
+                width: width ? (Math.floor(width) + 'px') : null,
+                height: height ? (Math.floor(height) + 'px') : null,
+            };
         },
 
         onClick() {
@@ -120,8 +109,8 @@ export default {
 
 .rotation {
     position: absolute;
-    // top: 50%;
-    // left: 50%;
+    width: 100%;
+    height: 100%;
     perspective: 600px;
 
     // transform: translateX(-50%) translateY(-50%);

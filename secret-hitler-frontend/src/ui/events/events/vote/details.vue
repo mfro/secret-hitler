@@ -2,7 +2,7 @@
     <uikit:simple-page :no-header="args.pass">
         <span slot="header" v-if="!args.pass">The vote failed</span>
         
-        <government v-else :government="args"/>
+        <government :government="args"/>
 
         <player-list>
             <template slot="icon" slot-scope="{ player }">

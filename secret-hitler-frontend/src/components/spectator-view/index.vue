@@ -2,7 +2,14 @@
     <v-app>
         <v-layout>
             <v-layout class="log-container">
-                <log-view/>
+                <log-view v-if="isStarted"/>
+                
+                <player-list large>
+                    <template slot="icon" slot-scope="{ player }">
+                        <v-icon medium class="green--text" v-if="player.isReady">check</v-icon>
+                        <v-icon medium v-else>hourglass_empty</v-icon>
+                    </template>
+                </player-list>
             </v-layout>
 
             <v-layout column v-if="isStarted">
@@ -26,12 +33,7 @@
             </v-layout>
 
             <v-layout v-else>
-                <player-list large>
-                    <template slot="icon" slot-scope="{ player }">
-                        <v-icon medium class="green--text" v-if="player.isReady">check</v-icon>
-                        <v-icon medium v-else>hourglass_empty</v-icon>
-                    </template>
-                </player-list>
+                <v-flex class="box"/>
             </v-layout>
         </v-layout>
     </v-app>
@@ -89,4 +91,10 @@ export default {
     flex: 0 0 auto;
 }
 
+.box {
+    margin: 6%;
+    background-size: contain;
+    background-image: url('../../assets/misc/box.svg');
+    background-position: center;
+}
 </style>
