@@ -1361,8 +1361,6 @@ export class Game {
         };
 
         if (this.state != GameState.LOBBY) {
-            data.deckSize = this.cardPool.drawSize;
-
             data.boardState = this.boardState;
 
             if (this.victory) {

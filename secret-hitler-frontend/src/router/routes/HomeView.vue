@@ -56,16 +56,7 @@ export default {
         },
 
         result() {
-            if (!debug.isDebug)
-                return this.results[0];
-
-            return {
-                name: 'assassination',
-                args: {
-                    president: 17,
-                    target: 19,
-                },
-            };
+            return this.results[0];
         },
     }
 };
