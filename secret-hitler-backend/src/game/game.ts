@@ -325,9 +325,9 @@ function BEGIN_GAME(game: Game) {
         drawSize: game.cardPool.drawSize,
         discardSize: game.cardPool.discardSize,
     };
-
+    
     game.currentTurn = 1;
-    game.nextPresident = 0;
+    game.nextPresident = Math.floor(Math.random() * game.allPlayers.length);
 
     game.assignRoles();
 

@@ -17,6 +17,10 @@
                         <v-icon medium v-if="player.vote !== null && player.vote" class="voted green--text">thumb_up</v-icon>
                         <v-icon medium v-else class="voted red--text">thumb_down</v-icon>
                     </template>
+
+                    <template v-else>
+                        <v-icon medium v-text="' w '"/>
+                    </template>
                 </v-layout>
             </v-layout>
 
@@ -53,6 +57,9 @@ export default {
             if (this.game.executiveAction)
                 id = this.game.executiveAction.president;
             
+            else if (this.game.legislature)
+                id = this.game.legislature.president;
+            
             else if (this.game.nomination)
                 id = this.game.nomination.president;
 
@@ -63,6 +70,9 @@ export default {
             let id;
             if (this.game.executiveAction)
                 id = this.game.executiveAction.chancellor;
+            
+            else if (this.game.legislature)
+                id = this.game.legislature.chancellor;
             
             else if (this.game.nomination)
                 id = this.game.nomination.chancellor;
