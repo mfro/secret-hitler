@@ -24,9 +24,13 @@ export class Context extends EventEmitter {
     }
 
     join(base: WebSocket, name: string) {
-        let player = this.game.addPlayer(name);
-        let socket = new Socket.Player(base, player);
+        let player = this.game.allPlayers.find(p => intern(p.name) == intern(name));
 
+        if (player == null) {
+            player = this.game.addPlayer(name);
+        }
+
+        let socket = new Socket.Player(base, player);
         this.add(socket);
     }
 
@@ -44,14 +48,34 @@ export class Context extends EventEmitter {
     }
 
     canJoin(name: string) {
+        if (intern(name) == null)
+            return false;
+
         let player = this.game.allPlayers.find(p => intern(p.name) == intern(name));
-        return intern(name) != null && player == null && this.game.state == GameState.LOBBY;
+
+        if (player == null)
+            return this.game.state == GameState.LOBBY;
+
+        let socket = this.sockets.find(s => s instanceof Socket.Player && s.player == player);
+
+        if (socket != null)
+            return false;
+
+        return true;
     }
 
     canRejoin(id: number) {
         let player = this.game.allPlayers.find(p => p.id == id);
+
+        if (player == null)
+            return false;
+
         let socket = this.sockets.find(s => s instanceof Socket.Player && s.player == player);
-        return player != null && socket == null;
+
+        if (socket != null)
+            return false;
+
+        return true;
     }
 
     private dispose() {
@@ -59,6 +83,7 @@ export class Context extends EventEmitter {
             socket.close();
             this.cleanup(socket);
         }
+
         this.emit('complete');
     }
 

@@ -68,13 +68,16 @@ export default {
 @import "~style";
 
 .box-container {
-    flex: 0 0 40vh;
+    flex: 0 0 auto;
 }
 
 .box {
-    margin: @spacer;
+    margin: @spacer 0;
     background-size: contain;
     background-image: url('../../assets/misc/box.svg');
     background-position: center;
+
+    height: 41vw;
+    max-height: 26em;
 }
 </style>
