@@ -56,6 +56,12 @@ function make_game(args, mapper) {
     }, args)
 }
 
+export const GAME_LOBBY = make_game({
+    state: 'LOBBY',
+}, p => ({
+    isReady: false,
+}));
+
 export const GAME_NOMINATING_SELF = make_game({
     state: 'NOMINATING',
     nomination: {
@@ -89,6 +95,48 @@ export const GAME_VOTING_DONE = make_game({
 }, p => ({
     hasVoted: p.id % 2 == 0,
 }));
+
+export const GAME_DEAD_SELF = make_game({
+    state: 'VOTING',
+    nomination: {
+        president: 1,
+        chancellor: 2,
+    },
+}, p => ({
+    hasVoted: p.id % 2 == 1 || p.id == 0,
+    isAlive: p.id != 0,
+}));
+
+export const GAME_DEAD_OTHER = make_game({
+    state: 'VOTING',
+    nomination: {
+        president: 1,
+        chancellor: 3,
+    },
+}, p => ({
+    hasVoted: p.id % 2 == 1,
+    isAlive: p.id != 2,
+}));
+
+export const GAME_LIBERAL_POLICY_VICTORY = make_game({
+    state: 'COMPLETED',
+    victory: 'LIBERAL_POLICY',
+});
+
+export const GAME_FASCIST_POLICY_VICTORY = make_game({
+    state: 'COMPLETED',
+    victory: 'FASCIST_POLICY',
+});
+
+export const GAME_LIBERAL_HITLER_VICTORY = make_game({
+    state: 'COMPLETED',
+    victory: 'LIBERAL_HITLER',
+});
+
+export const GAME_FASCIST_HITLER_VICTORY = make_game({
+    state: 'COMPLETED',
+    victory: 'FASCIST_HITLER',
+});
 
 export const VOTE_EVENT = {
     name: 'vote',
@@ -141,5 +189,6 @@ export const ASSASSINATION_EVENT = {
 };
 
 if (isDebug) {
-    store.commit('SET_GAME', GAME_VOTING_DONE);
+    // store.commit('SET_GAME', GAME_FASCIST_HITLER_VICTORY);
+    // store.commit('SET_WATCHING', true);
 }

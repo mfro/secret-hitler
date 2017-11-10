@@ -162,6 +162,10 @@ export default {
 <style lang="less">
 html {
     touch-action: manipulation;
+
+    @media screen and (min-width: 600px) {
+        overflow-y: auto;
+    }
 }
 
 a {

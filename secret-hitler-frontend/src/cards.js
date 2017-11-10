@@ -23,8 +23,6 @@ import * as policy_back from './assets/policy/back.png';
 import * as policy_liberal from './assets/policy/liberal.png';
 import * as policy_fascist from './assets/policy/fascist.png';
 
-import { loadImage } from './preload';
-
 const role_fascist = [role_fascist0, role_fascist1, role_fascist2];
 const role_liberal = [role_liberal0, role_liberal1, role_liberal2, role_liberal3, role_liberal4, role_liberal5];
 
@@ -60,31 +58,4 @@ export const fascist_policy = { back: policy_back, front: policy_fascist };
 
 function rand(list) {
     return list[Math.floor(Math.random() * list.length)];
-}
-
-export function load() {
-    let allCards = [
-        role_back,
-        role_hitler0,
-        ...role_fascist,
-        ...role_liberal,
-
-        membership_back,
-        membership_fascist,
-        membership_liberal,
-
-        vote_back,
-        vote_ja,
-        vote_nein,
-
-        policy_back,
-        policy_fascist,
-        policy_liberal
-    ];
-
-    Promise.each(allCards, path => {
-        return loadImage(path);
-    }).then(() => {
-        console.log('cards fetched');
-    });
 }

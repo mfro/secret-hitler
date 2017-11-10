@@ -8,7 +8,7 @@
             </span>
             
             <span class="info" v-else-if="result == 'LIBERAL_HITLER'">
-                Hitler is dead
+                Hitler was assassinated
             </span>
             
             <span class="info" v-else-if="result == 'FASCIST_POLICY'">

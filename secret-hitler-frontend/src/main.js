@@ -3,11 +3,11 @@ import App from './App.vue'
 
 import store from './store';
 import router from './router';
-import * as cards from './cards';
 import * as socket from './socket';
 
 import './debug';
 import './uikit';
+import './assets';
 import extend from '@mfro/promise-extensions';
 
 extend(Promise);
@@ -27,4 +27,3 @@ router.push('/');
 
 window.socket = socket;
 
-cards.load();

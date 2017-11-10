@@ -9,6 +9,10 @@
             </template>
         </player-list>
 
+        <v-layout class="box-container">
+            <v-flex class="box"/>
+        </v-layout>
+
         <v-layout slot="footer" align-center justify-center>
             <v-btn @click="cancel()">Cancel</v-btn>
 
@@ -62,4 +66,15 @@ export default {
 
 <style module lang="less">
 @import "~style";
+
+.box-container {
+    flex: 0 0 40vh;
+}
+
+.box {
+    margin: @spacer;
+    background-size: contain;
+    background-image: url('../../assets/misc/box.svg');
+    background-position: center;
+}
 </style>

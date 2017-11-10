@@ -1,10 +1,12 @@
 <template>
     <v-app>
-        <v-layout>
+        <completed-view v-if="game.state == 'COMPLETED'"/>
+
+        <v-layout v-else>
             <v-layout class="log-container">
                 <log-view v-if="isStarted"/>
                 
-                <player-list large>
+                <player-list large v-else>
                     <template slot="icon" slot-scope="{ player }">
                         <v-icon medium class="green--text" v-if="player.isReady">check</v-icon>
                         <v-icon medium v-else>hourglass_empty</v-icon>
@@ -48,6 +50,7 @@ import PlayerList from '@/ui/player-list';
 import PolicyCard from '@/ui/policy-card';
 
 import Gameboard from './gameboard';
+import CompletedView from './completed-view';
 import PlayerDisplay from './player-display';
 
 export default {
@@ -57,6 +60,7 @@ export default {
         PlayerList,
         Gameboard,
         PlayerDisplay,
+        CompletedView,
     },
 
     computed: {

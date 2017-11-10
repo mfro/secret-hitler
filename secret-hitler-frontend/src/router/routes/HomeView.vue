@@ -11,6 +11,7 @@ import { mapGetters } from 'vuex';
 
 import * as debug from '@/debug';
 
+import DeadView from '@/components/dead-view';
 import LobbyView from '@/components/lobby-view';
 import NominatingView from '@/components/nominating-view';
 import LegislatingView from '@/components/legistlating-view';
@@ -23,6 +24,7 @@ import ResultView from '@/components/result-view';
 
 export default {
     components: {
+        DeadView,
         LobbyView,
         NominatingView,
         LegislatingView,
@@ -51,6 +53,9 @@ export default {
 
             if (this.game.state == 'EXECUTIVE_ACTION')
                 return 'executive-action';
+
+            if (this.game.state != 'LOBBY' && this.game.state != 'COMPLETED' && !this.localPlayer.isAlive)
+                return 'dead';
 
             return this.game.state.toLowerCase();
         },
