@@ -24,10 +24,18 @@ const getters = {
     results(state) {
         return state.results;
     },
-    
-    allPlayers() {
-        return state.game && state.game.players.sort((a, b) => {
-            return a.name.localeCompare(b.name);
+
+    allPlayers(state) {
+        if (!state.game)
+            return null;
+
+        if (state.game.state == 'LOBBY')
+            return state.game.players.sort((a, b) => {
+                return a.name.localeCompare(b.name);
+            });
+
+        return state.game.players.sort((a, b) => {
+            return a.index - b.index;
         });
     },
 

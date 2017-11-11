@@ -4,8 +4,6 @@ import { CardPool } from './cardPool';
 
 import { Role, Player, Faction, Assignment } from '.';
 
-import { TypeState } from 'typestate';
-
 import { GameEvent } from './gameEvent';
 
 export enum GameState {
@@ -296,7 +294,7 @@ function START_NOMINATING(game: Game) {
     for (let player of game.allPlayers) {
         player.vote = null;
     }
-    
+
     if (game.nomination == null) {
         while (!game.allPlayers[game.nextPresident].isAlive) {
             game.nextPresident = (game.nextPresident + 1) % game.allPlayers.length;
@@ -325,7 +323,7 @@ function BEGIN_GAME(game: Game) {
         drawSize: game.cardPool.drawSize,
         discardSize: game.cardPool.discardSize,
     };
-    
+
     game.currentTurn = 1;
     game.nextPresident = Math.floor(Math.random() * game.allPlayers.length);
 
@@ -1342,7 +1340,10 @@ export class Game {
         for (let i = 0; i < fCount; i++) roles.push(Role.FASCIST);
         for (let i = 0; i < lCount; i++) roles.push(Role.LIBERAL);
 
-        for (let player of this.allPlayers) {
+        for (let index = 0; index < this.allPlayers.length; index++) {
+            let player = this.allPlayers[index];
+
+            player.index = index;
             let i = Math.floor(Math.random() * roles.length);
             let role = roles.splice(i, 1)[0];
 

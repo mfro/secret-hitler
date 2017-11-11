@@ -13,6 +13,7 @@ export class Player {
     isReady = false;
     isAlive = true;
 
+    index: number | null = null;
     assignment: Assignment | null = null;
 
     vote: boolean | null = null;
@@ -48,6 +49,7 @@ export class Player {
         if (this.game.state == GameState.LOBBY) {
             data.isReady = this.isReady;
         } else {
+            data.index = this.index;
             data.isAlive = this.isAlive;
             data.isTermLimited = this.termLimited;
         }

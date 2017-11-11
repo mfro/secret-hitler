@@ -5,7 +5,6 @@
     "version": "1.0.0",
     "main": "dist/main.js",
     "dependencies": {
-        "typestate": "^1.0.4",
         "ws": "^3.2.0",
         "@mfro/promise-extensions": "^2.0.1"
     },
