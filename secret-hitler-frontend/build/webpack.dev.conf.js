@@ -6,14 +6,25 @@ var config = require('../config')
 var merge = require('webpack-merge')
 var baseWebpackConfig = require('./webpack.base.conf')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
+var PreloadWebpackPlugin = require('preload-webpack-plugin')
 var FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 
 // add hot-reload related code to entry chunks
-Object.keys(baseWebpackConfig.entry).forEach(function (name) {
-  baseWebpackConfig.entry[name] = ['./build/dev-client'].concat(baseWebpackConfig.entry[name])
-})
+for (var i = 0; i < baseWebpackConfig.length; i++) {
+  Object.keys(baseWebpackConfig[i].entry).forEach(function (name) {
+    baseWebpackConfig[i].entry[name] = ['./build/dev-client'].concat(baseWebpackConfig[i].entry[name])
+  })
 
-module.exports = merge(baseWebpackConfig, {
+  baseWebpackConfig[i] = merge(baseWebpackConfig[i], {
+    plugins: [
+      new webpack.DefinePlugin({
+        'WEBPACK_NAME': JSON.stringify(baseWebpackConfig[i].name),
+      })
+    ]
+  })
+}
+
+var baseDevConfig = {
   module: {
     rules: utils.styleLoaders({ sourceMap: config.dev.cssSourceMap })
   },
@@ -27,6 +38,13 @@ module.exports = merge(baseWebpackConfig, {
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
     // https://github.com/ampedandwired/html-webpack-plugin
+    new PreloadWebpackPlugin(),
+    new FriendlyErrorsPlugin(),
+  ]
+};
+
+var playerConfig = merge(baseWebpackConfig[0], baseDevConfig, {
+  plugins: [
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: 'index.html',
@@ -34,6 +52,19 @@ module.exports = merge(baseWebpackConfig, {
       serviceWorkerLoader: `<script>${fs.readFileSync(path.join(__dirname,
         './service-worker-dev.js'), 'utf-8')}</script>`
     }),
-    new FriendlyErrorsPlugin()
   ]
 })
+
+var spectateConfig = merge(baseWebpackConfig[1], baseDevConfig, {
+  plugins: [
+    new HtmlWebpackPlugin({
+      filename: 'spectate/index.html',
+      template: 'index.html',
+      inject: true,
+      serviceWorkerLoader: `<script>${fs.readFileSync(path.join(__dirname,
+        './service-worker-dev.js'), 'utf-8')}</script>`
+    }),
+  ]
+})
+
+module.exports = [playerConfig, spectateConfig];

@@ -1,39 +1,19 @@
 import { Player } from './player'
 import { Faction } from './faction';
 
-export interface GameEvent<TArgs> {
-    readonly name: string;
-    readonly args: TArgs;
+export abstract class GameEvent<TArgs> {
+    abstract readonly name: string;
+    abstract readonly args: TArgs;
 
-    readonly alert: boolean;
-    readonly log: boolean;
-}
+    abstract readonly alert: boolean;
+    abstract readonly log: boolean;
 
-function make<TName>(name: TName, alert: boolean, log: boolean) {
-    return {
-        define<TType, TArgs>(): { new(args: TArgs): TType } {
-            return <any>class {
-                readonly name: TName;
-                readonly args: TArgs;
-
-                readonly alert: boolean;
-                readonly log: boolean;
-
-                constructor(args: TArgs) {
-                    this.name = name;
-                    this.alert = alert;
-                    this.log = log;
-                }
-
-                toJSON() {
-                    return {
-                        name: this.name,
-                        args: this.args,
-                    };
-                }
-            };
-        },
-    };
+    toJSON() {
+        return {
+            name: this.name,
+            args: this.args,
+        };
+    }
 }
 
 export namespace GameEvent {
@@ -101,84 +81,84 @@ export namespace GameEvent {
         target: Player
     }
 
-    export class RoleAssignment implements GameEvent<RoleAssignmentArgs> {
+    export class RoleAssignment extends GameEvent<RoleAssignmentArgs> {
         readonly name = kRoleAssignment;
         readonly alert = true;
         readonly log = false;
 
-        constructor(readonly args: RoleAssignmentArgs) { }
+        constructor(readonly args: RoleAssignmentArgs) { super(); }
     }
 
-    export class TurnCompleted implements GameEvent<TurnCompletedArgs> {
+    export class TurnCompleted extends GameEvent<TurnCompletedArgs> {
         readonly name = kTurnCompleted;
         readonly alert = false;
         readonly log = true;
 
-        constructor(readonly args: TurnCompletedArgs) { }
+        constructor(readonly args: TurnCompletedArgs) { super(); }
     }
 
-    export class Nomination implements GameEvent<NominationArgs> {
+    export class Nomination extends GameEvent<NominationArgs> {
         readonly name = kNomination;
         readonly alert = false;
         readonly log = true;
 
-        constructor(readonly args: NominationArgs) { }
+        constructor(readonly args: NominationArgs) { super(); }
     }
 
-    export class Vote implements GameEvent<VoteArgs> {
+    export class Vote extends GameEvent<VoteArgs> {
         readonly name = kVote;
         readonly alert = true;
         readonly log = true;
 
-        constructor(readonly args: VoteArgs) { }
+        constructor(readonly args: VoteArgs) { super(); }
     }
 
-    export class Policy implements GameEvent<PolicyArgs> {
+    export class Policy extends GameEvent<PolicyArgs> {
         readonly name = kPolicy;
         readonly alert = true;
         readonly log = true;
 
-        constructor(readonly args: PolicyArgs) { }
+        constructor(readonly args: PolicyArgs) { super(); }
     }
 
-    export class Veto implements GameEvent<VetoArgs> {
+    export class Veto extends GameEvent<VetoArgs> {
         readonly name = kVeto;
         readonly alert = true;
         readonly log = true;
 
-        constructor(readonly args: VetoArgs) { }
+        constructor(readonly args: VetoArgs) { super(); }
     }
 
-    export class PreviewDeck implements GameEvent<PreviewDeckArgs> {
+    export class PreviewDeck extends GameEvent<PreviewDeckArgs> {
         readonly name = kPreviewDeck;
         readonly alert = false;
         readonly log = true;
 
-        constructor(readonly args: PreviewDeckArgs) { }
+        constructor(readonly args: PreviewDeckArgs) { super();}
     }
 
-    export class Investigation implements GameEvent<InvestigationArgs> {
+    export class Investigation extends GameEvent<InvestigationArgs> {
         readonly name = kInvestigation;
         readonly alert = true;
         readonly log = true;
 
-        constructor(readonly args: InvestigationArgs) { }
+        constructor(readonly args: InvestigationArgs) { super(); }
     }
 
-    export class SpecialElection implements GameEvent<SpecialElectionArgs> {
+    export class SpecialElection extends GameEvent<SpecialElectionArgs> {
         readonly name = kSpecialElection;
         readonly alert = true;
         readonly log = true;
 
-        constructor(readonly args: SpecialElectionArgs) { }
+        constructor(readonly args: SpecialElectionArgs) { super(); }
     }
 
-    export class Assassination implements GameEvent<AssassinationArgs> {
+    export class Assassination extends GameEvent<AssassinationArgs> {
         readonly name = kAssassination;
         readonly alert = true;
         readonly log = true;
 
-        constructor(readonly args: AssassinationArgs) { }
+        constructor(readonly args: AssassinationArgs) { super(); }
     }
 
     // type RoleAssignment = GameEvent<typeof kRoleAssignment, RoleAssignmentArgs>;
