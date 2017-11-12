@@ -9,13 +9,16 @@
             <v-layout justify-space-around mt-3>
                 <template v-if="!connection">
                     <v-btn @click="create()">Create</v-btn>
-                    <v-btn class="watch" @click="watch()">Watch</v-btn>
                     <v-btn @click="join()">Join</v-btn>
                 </template>
 
                 <v-progress-circular indeterminate v-else-if="connection == 'CONNECTING'"/>
 
                 <span class="raw" v-else>{{ connection }}</span>
+            </v-layout>
+
+            <v-layout mt-3>
+                <span class="body-1">Go to <a href="/secret-hitler/spectate/">/secret-hitler/spectate/</a> to get a better view of the game</span>
             </v-layout>
         </v-container>
     </v-layout>
@@ -58,10 +61,6 @@ export default {
             } catch (e) { }
 
             socket.create(this.name);
-        },
-
-        watch() {
-            socket.watch(this.gameCode);
         },
 
         join() {
