@@ -1,35 +1,33 @@
 <template>
-    <v-layout class="container" :class="{ right }">
-        <v-layout class="root" :class="{ right, dead: !player.isAlive }">
-            <v-layout column py-1 class="main" :class="{ right }">
-                <div class="nameplate">
-                    <span class="name">{{ player.name }}</span>
-                </div>
+    <v-layout class="root" :class="{ right, dead: !player.isAlive }">
+        <v-layout column py-1 class="main" :class="{ right }">
+            <div class="nameplate">
+                <span class="name">{{ player.name }}</span>
+            </div>
 
-                <v-layout column justify-center>
-                    <template v-if="game.state == 'LOBBY'">
-                        <v-icon key="1" class="icon green--text"v-if="player.isReady">check</v-icon>
-                        <v-icon key="2" class="icon" v-else>hourglass_empty</v-icon>
-                    </template>
+            <v-layout column justify-center>
+                <template v-if="game.state == 'LOBBY'">
+                    <v-icon key="1" class="icon green--text"v-if="player.isReady">check</v-icon>
+                    <v-icon key="2" class="icon" v-else>hourglass_empty</v-icon>
+                </template>
 
-                    <template v-else-if="!player.isAlive">
-                        <v-icon key="3" class="icon" v-if="!player.isAlive">mdi-emoticon-dead</v-icon>
-                    </template>
-                    
-                    <div class="mx-3" v-else>
-                        <plaque :president="isPresident" :chancellor="isChancellor"/>
-                    </div>
-                </v-layout>
+                <template v-else-if="!player.isAlive">
+                    <v-icon key="3" class="icon" v-if="!player.isAlive">mdi-emoticon-dead</v-icon>
+                </template>
                 
-                <div v-if="player.isTermLimited" class="term-limit">
-                    <span class="term-limit">Term limited</span>
+                <div class="mx-3" v-else>
+                    <plaque :president="isPresident" :chancellor="isChancellor"/>
                 </div>
             </v-layout>
-
-            <div class="contents" v-if="player.isAlive" :class="{ right }">
-                <voting-card basis="long" class="fill-height card" :vote="vote" :class="{ hide: !showVote }"/>
+            
+            <div v-if="player.isTermLimited" class="term-limit">
+                <span class="term-limit">Term limited</span>
             </div>
         </v-layout>
+
+        <div class="contents" v-if="player.isAlive" :class="{ right }">
+            <voting-card basis="long" class="fill-height card" :vote="vote" :class="{ hide: !showVote }"/>
+        </div>
     </v-layout>
 </template>
 
@@ -138,20 +136,11 @@ export default {
 <style module lang="less">
 @import "~style";
 
-.container {
-    flex: 0 1 20%;
-    justify-content: flex-start;
-
-    &.right {
-        justify-content: flex-end;
-    }
-}
-
 .root {
-    flex: 0 0 auto;
+    flex: 0 1 calc(20% - @spacer);
     
     background-color: white;
-    box-shadow: 0 0 5px gray;
+    // box-shadow: 0 0 10px gray;
 
     margin: (@spacer * 0.5) 0;
 

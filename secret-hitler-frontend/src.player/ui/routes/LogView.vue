@@ -1,21 +1,29 @@
 <template>
-    <event-log @details="onDetails"/>
+    <uikit:simple-page no-header no-footer>
+        <v-list two-line class="my-list">
+            <event-preview v-for="(event, i) in log" :key="log.length - i" :event="event" @details="onDetails(event)"/>
+        </v-list>
+    </uikit:simple-page>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
 
-import EventLog from '@/ui/events/log';
+import EventPreview from '@player/ui/events/preview';
 
 export default {
     components: {
-        EventLog
+        EventPreview
     },
 
     computed: {
         ...mapGetters({
             game: 'game',
         }),
+
+        log() {
+            return this.game.log.slice().reverse();
+        }
     },
 
     methods: {

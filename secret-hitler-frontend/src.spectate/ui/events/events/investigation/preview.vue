@@ -1,17 +1,23 @@
 <template>
-    <uikit:simple-page no-footer>
-        <span slot="header">{{ target.name }} was shot by {{ president.name }}</span>
+    <base-event>
+        <v-icon slot="icon">mdi-magnify</v-icon>
 
-        <v-layout column>
-            <v-flex class="art"/>
-        </v-layout>
-    </uikit:simple-page>
+        <div class="subtitle">
+            <span>{{ target.name }}</span>
+        </div>
+    </base-event>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
 
+import BaseEvent from '../base';
+
 export default {
+    components: {
+        BaseEvent,
+    },
+
     props: {
         args: Object,
     },
@@ -35,16 +41,5 @@ export default {
 </script>
 
 <style module lang="less">
-@import "~style";
-
-.art {
-    background-image: url(../../../../assets/misc/gun.svg);
-    background-size: contain;
-    background-position: center;
-    margin: (@spacer * 2);
-}
-
-.icon {
-    font-size: 2
-}
+@import "../style";
 </style>

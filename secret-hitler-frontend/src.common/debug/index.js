@@ -45,10 +45,10 @@ function make_game(args, mapper) {
             return Object.assign({}, p, r);
         }).filter(p => p),
         boardState: {
-            liberals: 0,
-            fascists: 0,
-            voteFailures: 0,
-            deckSize: 17,
+            liberals: 3,
+            fascists: 3,
+            voteFailures: 1,
+            drawSize: 12,
             discardSize: 0,
         },
     }, args)
@@ -189,5 +189,5 @@ export const ASSASSINATION_EVENT = {
 export function init(store) {
     if (!isDebug) return;
 
-    // store.commit('SET_GAME', GAME_NOMINATING_SELF);
+    // store.commit('SET_GAME', GAME_VOTING_DONE);
 }

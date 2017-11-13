@@ -1,15 +1,13 @@
 <template>
-    <uikit:simple-page no-header no-footer>
-        <v-list two-line class="my-list">
-            <event-preview v-for="(event, i) in log" :key="log.length - i" :event="event" @details="onDetails(event)"/>
-        </v-list>
-    </uikit:simple-page>
+    <v-layout fill-height justify-end>
+        <event-preview v-for="(event, i) in log" :key="i" :event="event" @details="onDetails(event)"/>
+    </v-layout>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
 
-import EventPreview from './preview';
+import EventPreview from '@spectate/ui/events/preview';
 
 export default {
     components: {
@@ -22,13 +20,14 @@ export default {
         }),
 
         log() {
-            return this.game.log.slice().reverse();
+            return this.game.log;
         }
     },
 
     methods: {
         onDetails(e) {
-            this.$emit('details', e);
+            let i = this.game.log.indexOf(e);
+            this.$router.push('/log/' + i);
         }
     }
 };

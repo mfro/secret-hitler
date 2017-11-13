@@ -1,5 +1,9 @@
 <template>
-    <v-layout class="gameboard" mx-3 justify-center>
+    <v-layout class="gameboard" justify-center>
+        <v-layout class="stack-container" v-if="type == 'LIBERAL'">
+            <policy-stack class="stack" :count="game.boardState.drawSize"/>
+        </v-layout>
+
         <div class="board">
             <div class="image" :class="image"/>
 
@@ -9,6 +13,10 @@
 
             <div class="tracker" :style="trackerStyle" v-if="type == 'LIBERAL'"><div/></div>
         </div>
+
+        <v-layout class="stack-container" v-if="type == 'LIBERAL'">
+            <policy-stack class="stack" :count="game.boardState.discardSize"/>
+        </v-layout>
     </v-layout>
 </template>
 
@@ -96,10 +104,9 @@ export default {
 @import "~style";
 
 .stack-container {
-    padding: 0 (@spacer * 4);
     flex: 1 0 auto;
     align-items: center;
-    // justify-content: center;
+    justify-content: center;
 }
 
 .stack {
@@ -107,11 +114,11 @@ export default {
 }
 
 .board {
-    flex: 0 1 100vh;
+    flex: 0 1 84vh;
     background-color: #434343;
     padding: 1vh;
     box-sizing: border-box;
-    border: 2px solid lightgray;
+    border: 2px solid darkgray;
     align-self: center;
     position: relative;
     

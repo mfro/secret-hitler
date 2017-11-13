@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import EventDetails from '@/ui/events/details';
+import EventDetails from '@player/ui/events/details';
 
 export default {
     components: {
