@@ -4,8 +4,9 @@ ENV NPM_CONFIG_LOGLEVEL warn
 
 WORKDIR /app
 
+ARG MFRO_NPM_TOKEN
+COPY .npmrc .
 COPY package.json .
-
 RUN npm install
 
 COPY . .
