@@ -87,6 +87,7 @@ export default {
                 { icon: 'home', label: 'Home', path: '/home', },
                 { icon: 'person', label: 'Role', path: '/role', },
                 { icon: 'history', label: 'Game log', path: '/log', },
+                { icon: 'settings', label: 'Game options', path: '/options', },
             ]
         };
     },
