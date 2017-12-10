@@ -2,10 +2,7 @@
     <uikit:simple-page>
         <span slot="header">Select 2 policies to pass to the chancellor</span>
 
-        <v-layout align-center py-3 pl-3>
-            <v-flex v-for="(card, i) in session.presidentCards" :key="i" class="card-box mr-3">
-                <policy-card :policy="card" @input="select(i)" :class="{ active: selected.indexOf(i) != -1 }"/>
-            </v-flex>
+        <policy-selector :cards="session.presidentCards" v-model="discarding"/>
         </v-layout>
 
         <v-layout slot="footer" align-center justify-center>
@@ -17,16 +14,16 @@
 <script>
 import { mapGetters } from 'vuex';
 
-import PolicyCard from '@/ui/cards/policy';
+import PolicySelector from './policy-selector';
 
 export default {
     components: {
-        PolicyCard,
+        PolicySelector,
     },
 
     data() {
         return {
-            selected: [],
+            discarding: null,
         };
     },
 
@@ -41,34 +38,18 @@ export default {
         },
 
         isReady() {
-            return this.selected.length == 2;
+            return this.discarding != null;
         }
     },
 
     methods: {
-        select(i) {
-            console.log(i);
-
-            let index = this.selected.indexOf(i);
-            if (index < 0)
-                this.selected.push(i);
-            else
-                this.selected.splice(index, 1);
-        },
-
         submit() {
             if (this.session.president == this.localPlayer.id) {
-                let is = [0, 1, 2];
-                for (let pass of this.selected)
-                    is.splice(is.indexOf(pass), 1);
-
-                let discard = this.session.presidentCards[is[0]];
-
-                this.$send('LEGISLATURE_DISCARD', { card: discard });
+                this.$send('LEGISLATURE_DISCARD', { card: this.discarding });
             }
-        }
-    }
-}
+        },
+    },
+};
 </script>
 
 <style module lang="less">

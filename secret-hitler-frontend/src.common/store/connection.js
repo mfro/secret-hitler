@@ -1,8 +1,12 @@
 export const state = {
+    error: null,
     connection: null,
 };
 
 export const getters = {
+    error(state) {
+        return state.error;
+    },
     connection(state) {
         return state.connection;
     },
@@ -15,6 +19,10 @@ export const mutations = {
 
     SET_CONNECTION(state, value) {
         state.connection = value;
+    },
+
+    SET_ERROR(state, value) {
+        state.error = value;
     },
 };
 

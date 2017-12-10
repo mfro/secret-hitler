@@ -2,11 +2,7 @@
     <uikit:simple-page>
         <span slot="header">Select a policy to enact</span>
 
-        <v-layout align-center py-3 pl-3>
-            <v-flex v-for="(card, i) in session.chancellorCards" :key="i" class="card-box mr-3">
-                <policy-card :policy="card" @input="selected = i" :class="{ active: selected == i}"/>
-            </v-flex>
-        </v-layout>
+        <policy-selector :cards="session.chancellorCards" v-model="discarding"/>
 
         <v-layout slot="footer" align-center justify-center>
             <v-btn v-if="showVeto" :disabled="!canVeto" @click="veto()">Request veto</v-btn>
@@ -19,16 +15,16 @@
 <script>
 import { mapGetters } from 'vuex';
 
-import PolicyCard from '@/ui/cards/policy';
+import PolicySelector from './policy-selector';
 
 export default {
     components: {
-        PolicyCard,
+        PolicySelector,
     },
 
     data() {
         return {
-            selected: -1,
+            discarding: null,
         };
     },
 
@@ -43,7 +39,7 @@ export default {
         },
 
         isReady() {
-            return this.selected != -1;
+            return this.discarding != null;
         },
 
         showVeto() {
@@ -61,12 +57,9 @@ export default {
         },
         
         submit() {
-            let is = [0, 1];
-            is.splice(is.indexOf(this.selected), 1);
-
-            let discard = this.session.chancellorCards[is[0]];
-
-            this.$send('LEGISLATURE_DISCARD', { card: discard });
+            if (this.session.chancellor == this.localPlayer.id) {
+                this.$send('LEGISLATURE_DISCARD', { card: this.discarding });
+            }
         }
     }
 }

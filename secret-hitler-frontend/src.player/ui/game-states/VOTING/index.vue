@@ -1,5 +1,5 @@
 <template>
-    <uikit:simple-page no-footer no-header>
+    <uikit:simple-page no-header>
         <government :president="president" :chancellor="chancellor"/>
         
         <player-list large v-if="localPlayer.hasVoted" :filter="filter">
@@ -14,8 +14,13 @@
         </player-list>
             
         <v-layout align-center justify-center v-else class="pl-3">
-            <voting-card class="card mr-3" @input="vote" :vote="true"/>
-            <voting-card class="card mr-3" @input="vote" :vote="false"/>
+            <v-flex class="card-box" v-for="val in [true, false]" :key="val">
+                <voting-card class="mr-3" :class="{ active: vote === val }" @input="vote = val" :vote="val"/>
+            </v-flex>
+        </v-layout>
+
+        <v-layout slot="footer" align-center justify-center>
+            <v-btn :disabled="typeof vote != 'boolean'" @click="submit()">Vote</v-btn>
         </v-layout>
     </uikit:simple-page>
 </template>
@@ -36,6 +41,7 @@ export default {
 
     data() {
         return {
+            vote: null,
             selected: null,
         };
     },
@@ -62,8 +68,8 @@ export default {
             return !player.hasVoted;
         },
 
-        vote(vote) {
-            this.$send('SUBMIT_VOTE', { vote: vote });
+        submit() {
+            this.$send('SUBMIT_VOTE', { vote: this.vote });
         }
     }
 };
@@ -72,11 +78,15 @@ export default {
 <style module lang="less">
 @import "~style";
 
-.card {
-    flex: 1 1;
-}
-
 .header {
     .text();
+}
+
+.card-box {
+    flex-basis: 0;
+
+    .active {
+        box-shadow: 0 0 0 4px #4CAF50;
+    }
 }
 </style>

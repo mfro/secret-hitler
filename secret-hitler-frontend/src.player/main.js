@@ -7,6 +7,7 @@ import router from './router';
 import * as debug from '@/debug';
 import * as socket from '@/socket';
 
+import '@/init';
 import '@/uikit';
 import '@/assets';
 import extend from '@mfro/promise-extensions';

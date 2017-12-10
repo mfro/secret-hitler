@@ -12,9 +12,9 @@ import { Game, GameState } from '../game';
 
 export class Context extends EventEmitter {
     readonly game = new Game();
-    readonly sockets = new Array<Socket>();
+    readonly sockets = new Array<Socket.Bound>();
 
-    private add(socket: Socket) {
+    private add(socket: Socket.Bound) {
         socket.on('close', () => this.cleanup(socket));
         socket.on('message', m => this.handle(socket, m));
 
@@ -23,41 +23,46 @@ export class Context extends EventEmitter {
         this.sync();
     }
 
-    join(base: WebSocket, name: string) {
+    join(unbound: Socket.Unbound, name: string) {
         let player = this.game.allPlayers.find(p => intern(p.name) == intern(name));
 
         if (player == null) {
             player = this.game.addPlayer(name);
         }
 
-        let socket = new Socket.Player(base, player);
+        let socket = unbound.bind(Socket.Player, player);
         this.add(socket);
     }
 
-    rejoin(base: WebSocket, id: number) {
+    rejoin(unbound: Socket.Unbound, id: number) {
         let player = this.game.allPlayers.find(p => p.id == id)!;
-        let socket = new Socket.Player(base, player);
+        let socket = unbound.bind(Socket.Player, player);
 
         this.add(socket);
     }
 
-    watch(base: WebSocket) {
-        let socket = new Socket.Spectator(base, this.game);
+    watch(unbound: Socket.Unbound) {
+        let socket = unbound.bind(Socket.Spectator, this.game);
 
         this.add(socket);
+    }
+
+    static isValidName(name: string) {
+        if (!name || !intern(name))
+            return false;
+
+        return true;
     }
 
     canJoin(name: string) {
-        if (intern(name) == null)
+        if (!Context.isValidName(name))
             return false;
 
         let player = this.game.allPlayers.find(p => intern(p.name) == intern(name));
-
         if (player == null)
             return this.game.state == GameState.LOBBY;
 
         let socket = this.sockets.find(s => s instanceof Socket.Player && s.player == player);
-
         if (socket != null)
             return false;
 
@@ -85,6 +90,7 @@ export class Context extends EventEmitter {
         }
 
         this.emit('complete');
+        this.removeAllListeners();
     }
 
     private sync() {
@@ -132,7 +138,7 @@ export class Context extends EventEmitter {
         });
     }
 
-    private cleanup(socket: Socket) {
+    private cleanup(socket: Socket.Bound) {
         let index = this.sockets.indexOf(socket);
         if (index != -1)
             this.sockets.splice(index, 1);
@@ -140,6 +146,7 @@ export class Context extends EventEmitter {
         this.sync();
     }
 }
+
 function intern(name: string) {
     return name.toLowerCase().replace('\s+', '')
 }

@@ -1,21 +1,30 @@
+import * as packageJson from '../package.json';
+
+console.log(packageJson.version);
+
 let ws;
 let store;
 
-function connect(path) {
+function connect(name, args) {
+    store.commit('SET_ERROR', null);
+
     let base;
     if (location.hostname == 'mfro.me')
-        base = 'https://api.mfro.me/secret-hitler';
+        base = 'https://api.mfro.me/secret-hitler/';
     else
-        base = 'http://' + location.hostname + ':8081';
+        base = 'http://' + location.hostname + ':8081/';
 
     let url = base.replace('http', 'ws');
 
-    ws = new WebSocket(url + path);
+    ws = new WebSocket(url);
 
     ws.addEventListener('message', e => {
         let msg = JSON.parse(e.data);
 
         if (msg.name == 'state') {
+            if (store.getters.connection != 'OPEN')
+                store.commit('SET_CONNECTION', 'OPEN');
+
             store.commit('SET_GAME', msg.args);
         }
 
@@ -23,11 +32,25 @@ function connect(path) {
             store.commit('POST_RESULT', msg.args);
         }
 
+        if (msg.name == 'error') {
+            if (msg.args.name == 'VERSION') {
+                location.reload(true);
+            }
+
+            store.commit('SET_ERROR', args.error);
+            console.log('error:', msg.args);
+            dispose();
+        }
+
         console.log(msg);
     });
 
     ws.addEventListener('open', e => {
-        store.commit('SET_CONNECTION', 'OPEN');
+        ws.send(JSON.stringify({
+            name: name,
+            version: packageJson.version,
+            args: args,
+        }));
     })
 
     ws.addEventListener('close', e => {
@@ -52,19 +75,29 @@ export function reset() {
 }
 
 export function rejoin(game, id) {
-    connect(`/rejoin?game=${game}&id=${id}`);
+    connect('REJOIN', {
+        game: game,
+        id: id,
+    });
 }
 
 export function join(game, name) {
-    connect(`/join?game=${game}&name=${name}`);
+    connect('JOIN', {
+        game: game,
+        name: name,
+    });
 }
 
 export function watch(game) {
-    connect('/watch?game=' + game);
+    connect('WATCH', {
+        game: game,
+    });
 }
 
 export function create(name) {
-    connect('/create?name=' + name);
+    connect('CREATE', {
+        name: name,
+    });
 }
 
 export function send(name, args) {

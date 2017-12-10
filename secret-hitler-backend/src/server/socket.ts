@@ -7,28 +7,34 @@ import { json } from '../util';
 import { Game, Player as GamePlayer, GameState } from '../game';
 
 export abstract class Socket extends EventEmitter {
-    readonly game: Game;
-
     private base: WebSocket;
 
-    constructor(base: WebSocket, game: Game) {
+    constructor(base: WebSocket) {
         super();
 
-        this.game = game;
         this.base = base;
 
-        this.base.on('close', this.onClose.bind(this));
-        this.base.on('message', this.onMessage.bind(this));
+        this.onClose = this.onClose.bind(this);
+        this.onMessage = this.onMessage.bind(this);
+
+        this.base.on('close', this.onClose);
+        this.base.on('message', this.onMessage);
     }
 
-    abstract sync(): void;
-
-    sendResult(result: { name: string, args: any }) {
-        this.send('result', result);
+    sendError(error: { name: string, args: any }) {
+        this.send('error', error);
     }
 
     close() {
         this.base.close();
+    }
+
+    protected upgrade<TSocket extends Socket, T>(ctor: new (base: WebSocket, arg: T) => TSocket, arg: T) {
+        this.removeAllListeners();
+        this.base.removeListener('close', this.onClose);
+        this.base.removeListener('message', this.onMessage);
+
+        return new ctor(this.base, arg);
     }
 
     protected send(name: string, args: any) {
@@ -53,7 +59,29 @@ export abstract class Socket extends EventEmitter {
 }
 
 export namespace Socket {
-    export class Player extends Socket {
+    export class Unbound extends Socket {
+        bind<TSocket extends Socket, T>(ctor: new (base: WebSocket, arg: T) => TSocket, arg: T) {
+            return super.upgrade(ctor, arg);
+        }
+    }
+
+    export abstract class Bound extends Socket {
+        readonly game: Game;
+
+        constructor(base: WebSocket, game: Game) {
+            super(base);
+
+            this.game = game;
+        }
+
+        abstract sync(): void;
+
+        sendResult(result: { name: string, args: any }) {
+            this.send('result', result);
+        }
+    }
+
+    export class Player extends Bound {
         readonly player: GamePlayer;
 
         constructor(base: WebSocket, player: GamePlayer) {
@@ -75,7 +103,7 @@ export namespace Socket {
         }
     }
 
-    export class Spectator extends Socket {
+    export class Spectator extends Bound {
         constructor(base: WebSocket, game: Game) {
             super(base, game);
         }

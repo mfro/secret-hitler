@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <policy-card class="stack" policy="back"/>
+        <policy-card class="stack" :value="false" policy="LIBERAL"/>
         <span>{{ count }}</span>
     </div>
 </template>

@@ -38,7 +38,7 @@ export function StateMachine2<TState, TContext>() {
 
         update(state: TState, handler: UpdateHandler) {
             if (this.updates.get(state))
-                throw new Error(`Overwriting state: ${name}`);
+                throw new Error(`Overwriting state: ${state}`);
 
             this.updates.set(state, handler);
         }
@@ -281,7 +281,7 @@ export function StateMachine<TState, TContext, TTransitions extends string>(
 
         update(state: TState, action: UpdateHandler) {
             if (this.updates.get(state))
-                throw new Error(`Overwriting state: ${name}`);
+                throw new Error(`Overwriting state: ${state}`);
 
             this.updates.set(state, action);
         }
