@@ -9,10 +9,10 @@ function connect(name, args) {
     store.commit('SET_ERROR', null);
 
     let base;
-    if (location.hostname == 'mfro.me')
-        base = 'https://api.mfro.me/secret-hitler/';
-    else
+    if (location.hostname == 'localhost')
         base = 'http://' + location.hostname + ':8081/';
+    else
+        base = 'https://api.mfro.me/secret-hitler/';
 
     let url = base.replace('http', 'ws');
 
