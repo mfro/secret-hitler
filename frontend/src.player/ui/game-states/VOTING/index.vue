@@ -20,7 +20,7 @@
         </v-layout>
 
         <v-layout slot="footer" align-center justify-center>
-            <v-btn :disabled="typeof vote != 'boolean'" @click="submit()">Vote</v-btn>
+            <v-btn v-if="!localPlayer.hasVoted" :disabled="typeof vote != 'boolean'" @click="submit()">Vote</v-btn>
         </v-layout>
     </uikit:simple-page>
 </template>
