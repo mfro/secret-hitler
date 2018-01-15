@@ -1,5 +1,5 @@
 <template>
-    <div class="role-assignment">
+    <div class="role-assignment" v-if="assignment">
         <v-layout py-3 pl-3>
             <role-card class="card mr-3" v-model="roleFlipped" :role="assignment.role" />
             <membership-card class="card mr-3" v-model="membershipFlipped" :role="assignment.role" />

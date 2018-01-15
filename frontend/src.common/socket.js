@@ -46,6 +46,9 @@ function connect(name, args) {
     });
 
     ws.addEventListener('open', e => {
+        if (ws == null) return;
+        if (ws.readyState != WebSocket.OPEN) return;
+
         ws.send(JSON.stringify({
             name: name,
             version: packageJson.version,
