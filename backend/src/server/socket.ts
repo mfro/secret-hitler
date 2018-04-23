@@ -15,9 +15,11 @@ export abstract class Socket extends EventEmitter {
         this.base = base;
 
         this.onClose = this.onClose.bind(this);
+        this.onError = this.onError.bind(this);
         this.onMessage = this.onMessage.bind(this);
 
         this.base.on('close', this.onClose);
+        this.base.on('error', this.onError);
         this.base.on('message', this.onMessage);
     }
 
@@ -32,6 +34,7 @@ export abstract class Socket extends EventEmitter {
     protected upgrade<TSocket extends Socket, T>(ctor: new (base: WebSocket, arg: T) => TSocket, arg: T) {
         this.removeAllListeners();
         this.base.removeListener('close', this.onClose);
+        this.base.removeListener('error', this.onError);
         this.base.removeListener('message', this.onMessage);
 
         return new ctor(this.base, arg);
@@ -45,6 +48,11 @@ export abstract class Socket extends EventEmitter {
     }
 
     protected onClose(code: number, message: string) {
+        this.emit('close');
+    }
+
+    protected onError(e: Error) {
+        console.error(e);
         this.emit('close');
     }
 

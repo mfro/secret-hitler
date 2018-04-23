@@ -10,12 +10,9 @@ import * as socket from '@/socket';
 import '@/init';
 import '@/uikit';
 import '@/assets';
-import extend from '@mfro/promise-extensions';
 
 debug.init(store);
 socket.init(store);
-
-extend(Promise);
 
 Vue.prototype.$send = function (name, args) {
     socket.send(name, args);

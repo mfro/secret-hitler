@@ -16,8 +16,7 @@
     "vuex": "^2.5.0"
   },
   "devDependencies": {
-    "@mfro/promise-extensions": "^2.0.1",
-    "@mfro/vue-specific-css": "^1.0.1",
+    "@mfro/vue-specific-css": "^1.3.0",
     "autoprefixer": "^7.1.6",
     "babel-core": "^6.22.1",
     "babel-loader": "^7.1.1",

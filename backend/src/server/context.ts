@@ -115,7 +115,7 @@ export class Context extends EventEmitter {
         }
     }
 
-    private handle(socket: Socket, msg: { name: string, args: any }) {
+    private async handle(socket: Socket, msg: { name: string, args: any }) {
         if (!(socket instanceof Socket.Player)) {
             console.error('Got message from non-player socket', msg);
             return;
@@ -127,15 +127,17 @@ export class Context extends EventEmitter {
             sender: socket.player,
         };
 
-        return actions.invoke(msg.name, ctx).catch(e => {
+        try {
+            return await actions.invoke(msg.name, ctx);
+        } catch (e) {
             console.error(e);
-        }).finally(() => {
+        } finally {
             try {
                 this.sync();
             } catch (e) {
                 console.error(e)
             }
-        });
+        }
     }
 
     private cleanup(socket: Socket.Bound) {
