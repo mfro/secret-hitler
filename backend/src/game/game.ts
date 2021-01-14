@@ -1,10 +1,9 @@
-import { json, StateMachine, StateMachine2 } from '../util';
-
+import { json, StateMachine2 } from '../util';
 import { CardPool } from './cardPool';
-
-import { Role, Player, Faction, Assignment } from '.';
-
 import { GameEvent } from './gameEvent';
+import { Faction, Role } from './faction';
+import { Assignment } from './assignment';
+import { Player } from './player';
 
 export enum GameState {
     LOBBY = 'LOBBY',
@@ -553,7 +552,7 @@ mac.update(GameState.COMPLETED, function (game) {
     });
 
     mac.exit(GameState.NOMINATING, function(game) {
-        
+
                 game.emit(new GameEvent.Nomination({
                     president: game.nomination!.president,
                     chancellor: game.nomination!.chancellor!,

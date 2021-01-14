@@ -25,7 +25,11 @@ export function start() {
 
     wsServer.on('connection', onConnect);
 
-    httpServer.listen(8081, () => {
-        console.log(`Started server version ${packageJson.version} on port ${httpServer.address().port}`);
+    let port = process.argv[2] ? parseInt(process.argv[2]) : 8081;
+
+    httpServer.listen(port, () => {
+        let addr = httpServer.address()!;
+        let info = typeof addr == 'string' ? addr : addr.port;
+        console.log(`Started server version ${packageJson.version}: ${info}`);
     });
 }

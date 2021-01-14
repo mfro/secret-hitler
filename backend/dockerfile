@@ -1,0 +1,5 @@
+from node:14-alpine
+workdir /app
+copy main.js .
+expose 8081
+cmd ["node", "main.js"]

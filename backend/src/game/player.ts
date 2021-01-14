@@ -1,6 +1,7 @@
 import { json } from '../util';
 
-import { Assignment, Game, GameState } from '.';
+import { Assignment } from './assignment';
+import { Game, GameState } from './game';
 
 let nextId = 1;
 

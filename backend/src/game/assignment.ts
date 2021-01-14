@@ -1,4 +1,5 @@
-import { Role, Player, Faction } from '.';
+import { Faction, Role } from './faction';
+import { Player } from './player';
 
 export class Assignment {
     constructor(

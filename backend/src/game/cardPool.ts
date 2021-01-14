@@ -1,4 +1,4 @@
-import { Faction } from '.';
+import { Faction } from './faction';
 
 class Pile {
     cards = new Array<Faction>();

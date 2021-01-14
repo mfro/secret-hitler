@@ -38,11 +38,3 @@ export function error(ctx: ActionContext<any>, msg: string) {
         message: `Player ${ctx.sender}: ${msg}`,
     });
 }
-
-import './complete-action';
-import './legislature-discard';
-import './legislature-veto';
-import './nominate';
-import './set-action-target';
-import './set-ready';
-import './submit-vote';
